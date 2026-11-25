@@ -1,0 +1,825 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Método DEFINE</title>
+<style>
+@page { size: A4; margin: 0; }
+:root{--ink:#15192B;--accent:#FF5A36;--amber:#FFB703;--blue:#2D6CDF;--muted:#6B7085;--line:#E6E2DD;--soft:#FFF4EF}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#ddd}
+body{font-family:'Inter',sans-serif;color:var(--ink);font-size:10pt;line-height:1.48;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;padding:15mm 17mm 20mm;position:relative;overflow:hidden;background:#fff;break-after:page;page-break-after:always;margin:0 auto}
+@media screen{.page{margin:8mm auto;box-shadow:0 2px 12px rgba(0,0,0,.15)}}
+.foot{position:absolute;left:17mm;right:17mm;bottom:9mm;display:flex;justify-content:space-between;font-size:7.5pt;color:var(--muted);border-top:1px solid var(--line);padding-top:2.5mm;letter-spacing:.06em}
+.foot b{color:var(--accent)}
+h1,h2,h3{font-family:'Inter Display','Inter',sans-serif;margin:0}
+h1{font-size:28pt;line-height:1.05;font-weight:800;letter-spacing:-.01em;margin:1.5mm 0 3mm}
+h1.chap{font-size:30pt}
+h1.sm,h1.chap.sm{font-size:22pt}
+h2{font-size:14.5pt;font-weight:800;margin:5mm 0 2mm;letter-spacing:-.005em}
+h3{font-size:11pt;font-weight:700;margin:3.5mm 0 1.2mm}
+p{margin:0 0 2.3mm}
+.lead{font-size:11.5pt;color:#3A3F55;line-height:1.5}
+.small{font-size:8.8pt}
+.muted{color:var(--muted)}
+.kicker{font-size:8.5pt;letter-spacing:.2em;font-weight:800;color:var(--accent);text-transform:uppercase}
+.bar{width:22mm;height:1.6mm;background:var(--accent);border-radius:1mm;margin:0 0 5mm}
+ul,ol{margin:0 0 2.5mm;padding-left:5.5mm}
+li{margin:0 0 1.1mm}
+ul li::marker{color:var(--accent)}
+ol li::marker{color:var(--accent);font-weight:800}
+.box{border-radius:2.5mm;padding:3mm 4.5mm;margin:3.5mm 0;font-size:9.3pt;line-height:1.45}
+.box .lbl{display:block;font-size:7.6pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.8mm}
+.tip{background:#FFF1EC;border-left:1.5mm solid var(--accent)} .tip .lbl{color:var(--accent)}
+.warn{background:#FFF7DE;border-left:1.5mm solid #F2A900} .warn .lbl{color:#A87400}
+.key{background:#EAF2FF;border-left:1.5mm solid var(--blue)} .key .lbl{color:var(--blue)}
+table{width:100%;border-collapse:collapse;font-size:8.8pt;margin:2mm 0 3mm;table-layout:fixed}
+th{background:var(--ink);color:#fff;text-align:left;font-weight:600;padding:1.8mm 2.4mm;font-size:8.4pt}
+th:first-child{border-top-left-radius:1.5mm} th:last-child{border-top-right-radius:1.5mm}
+td{padding:1.6mm 2.4mm;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even) td{background:#FAF8F5}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+.cols2.tight{gap:4mm}
+/* placeholder */
+.ph{border:.5mm dashed #EE8A6C;border-radius:3mm;background:repeating-linear-gradient(45deg,#FFF7F3 0 7px,#FFEFE8 7px 14px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4mm 6mm;color:#C2533A;margin:2mm 0 3mm;flex-shrink:0}
+.ph .num{font-size:7pt;font-weight:800;letter-spacing:.16em;background:var(--accent);color:#fff;padding:.7mm 2.6mm;border-radius:10mm;margin-top:1.5mm}
+.ph .t{font-family:'Inter Display';font-weight:800;font-size:10.5pt;color:var(--ink);margin:1.6mm 0 1mm}
+.ph .d{font-size:7.8pt;line-height:1.38;color:#7A5245;max-width:120mm}
+.ph .f{font-size:6.8pt;color:#B36A55;margin-top:1.6mm;font-weight:600}
+.ph.dark{background:repeating-linear-gradient(45deg,#20253A 0 7px,#252B42 7px 14px);border-color:#FF7A5C;color:#FF8A6E}
+.ph.dark .t{color:#fff} .ph.dark .d{color:#C9CCD8} .ph.dark .f{color:#FF9C84}
+/* cover */
+.cover{background:var(--ink);color:#fff;padding:18mm 17mm}
+.cover-kicker{font-size:9pt;letter-spacing:.3em;font-weight:800;color:var(--amber)}
+.cover-title{font-family:'Inter Display';font-weight:900;font-size:56pt;line-height:.92;margin:4mm 0 4mm;letter-spacing:-.02em}
+.cover-title span{color:var(--accent)}
+.cover-sub{font-size:12.5pt;color:#C9CCD8;max-width:150mm;line-height:1.45;margin-bottom:6mm}
+.cover-pills{display:flex;gap:3mm;flex-wrap:wrap;margin-top:4mm}
+.cover-pills span{border:1px solid #FF5A36;color:#fff;border-radius:10mm;padding:1.6mm 4mm;font-size:8.8pt;font-weight:600}
+.cover-author{position:absolute;bottom:16mm;left:17mm;font-size:10pt;color:#9DA1B3;letter-spacing:.08em}
+.cover .ph{margin-top:2mm}
+/* misc components */
+.legal{margin-top:6mm;font-size:8pt;color:var(--muted);border-top:1px solid var(--line);padding-top:3mm}
+.legal p{margin-bottom:1.2mm}
+.toc{margin-top:2mm}
+.toc .row{display:flex;align-items:baseline;gap:2mm;padding:1.9mm 0;border-bottom:1px solid var(--line);font-size:10.5pt}
+.toc .row.l1{font-weight:700;font-family:'Inter Display';font-size:11.5pt;padding-top:3mm}
+.toc .row.l2{padding-left:7mm;color:#3A3F55;font-size:9.6pt;border-bottom:1px dotted var(--line)}
+.toc .row .dots{flex:1}
+.toc .row .pg{font-weight:700;color:var(--accent);min-width:8mm;text-align:right}
+.steps{display:flex;flex-direction:column;gap:2.2mm;margin:2mm 0 3mm}
+.step{display:flex;gap:4mm;align-items:flex-start;background:#FAF8F5;border-radius:2.5mm;padding:2.6mm 4mm}
+.step>b{flex:0 0 9mm;height:9mm;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter Display';font-size:13pt}
+.step h3{margin:0 0 .5mm;font-size:10.5pt}
+.step p{margin:0;font-size:9pt;color:#3A3F55}
+.cards3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm;margin-top:2mm}
+.card{background:#FAF8F5;border-radius:3mm;padding:4mm;border-top:1.4mm solid var(--accent)}
+.card .cnum{font-family:'Inter Display';font-weight:900;font-size:20pt;color:var(--accent);line-height:1}
+.card h3{margin:2mm 0 1mm}
+.card p{font-size:9pt;margin:0;color:#3A3F55}
+svg{display:block;width:100%;height:auto;margin:1mm 0 2mm}
+.ph svg,.cam svg{width:22px;height:22px;display:inline;margin:0}
+.legend{font-size:8.5pt;color:var(--muted);display:flex;align-items:center;gap:2mm;margin:-1mm 0 2mm}
+.lg{display:inline-block;width:7mm;height:1.3mm;border-radius:1mm;margin-left:3mm}
+.lg.grey{background:#B9BCC8}.lg.orange{background:var(--accent);height:2mm}
+.formula{background:var(--ink);color:#fff;border-radius:2.5mm;padding:3mm 4.5mm;margin:2mm 0;font-size:10pt;font-family:'JetBrains Mono',monospace}
+.formula span{display:inline-block;background:var(--accent);color:#fff;font-family:'Inter';font-weight:800;font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;padding:.6mm 2.4mm;border-radius:1mm;margin-right:3mm}
+.formula b{color:var(--amber)}
+.macros{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm;margin:2mm 0 2mm}
+.macro{border-radius:3mm;padding:3.5mm 4mm;color:#fff}
+.macro.p{background:var(--accent)}.macro.g{background:var(--blue)}.macro.c{background:var(--amber);color:var(--ink)}
+.macro .mt{font-size:8pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
+.macro .mv{font-family:'Inter Display';font-size:17pt;font-weight:900;line-height:1.1;margin:1mm 0 .3mm}
+.macro .mu{font-size:7.8pt;opacity:.9;margin-bottom:1.5mm}
+.macro p{font-size:8.4pt;margin:0;line-height:1.35}
+.sheet{border:1.2px solid var(--ink);border-radius:3mm;padding:2mm 6mm 5mm;margin:2mm 0 3mm}
+.sheet h3{color:var(--accent);text-transform:uppercase;font-size:8.6pt;letter-spacing:.14em;margin:4.5mm 0 1mm}
+.field{display:flex;align-items:flex-end;gap:2mm;padding:2.6mm 0 0;font-size:9.6pt}
+.field span{white-space:nowrap}
+.field i{flex:1;border-bottom:1px solid #9AA0B2;height:5mm}
+.field em{font-style:normal;color:var(--muted);font-size:8.6pt;min-width:12mm}
+.fields3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5mm}
+.fields2{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+.shopgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3mm 5mm}
+.shop h3{border-bottom:1.4mm solid var(--accent);padding-bottom:1mm;margin-top:2mm}
+.checks{list-style:none;padding:0;margin:1mm 0 0}
+.checks li{display:flex;align-items:center;gap:2mm;font-size:9pt;padding:1mm 0;border-bottom:1px dotted var(--line)}
+.cb{display:inline-block;width:3.6mm;height:3.6mm;border:1.2px solid #8C91A5;border-radius:.8mm;flex-shrink:0}
+table.menu td{font-size:8.3pt;line-height:1.35;height:24mm}
+table.menu td:first-child{background:#FFF1EC!important;color:var(--accent)}
+.recipe{display:flex;gap:6mm;margin:2mm 0 4mm;padding-bottom:3mm;border-bottom:1px solid var(--line)}
+.recipe .rbody{flex:1}
+.recipe h2{margin:2mm 0 1.5mm;font-size:13.5pt}
+.recipe h3{margin:2mm 0 1mm;font-size:9.6pt;color:var(--accent);text-transform:uppercase;letter-spacing:.1em}
+.recipe ul,.recipe ol{font-size:8.6pt}
+.recipe li{margin-bottom:.7mm}
+.rtip{background:#FFF1EC;border-radius:2mm;padding:2mm 3mm;font-size:8.4pt;margin-top:1.5mm}
+.rtip b{color:var(--accent)}
+.badges{display:flex;gap:1.6mm;flex-wrap:wrap}
+.badges span{background:var(--soft);color:#B8432A;font-weight:700;font-size:7.8pt;padding:.9mm 2.4mm;border-radius:10mm}
+.badges span:first-child{background:var(--accent);color:#fff}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:2mm 0 2mm}
+.pillars>div{background:#FAF8F5;border-radius:3mm;padding:3.5mm}
+.pillars b{display:flex;width:8mm;height:8mm;border-radius:50%;background:var(--ink);color:#fff;align-items:center;justify-content:center;font-family:'Inter Display'}
+.pillars h3{margin:2mm 0 1mm}
+.pillars p{font-size:8.5pt;margin:0;color:#3A3F55;line-height:1.38}
+.legendgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3mm;margin:2mm 0 3mm}
+.legendgrid div{background:#FAF8F5;border-radius:2.5mm;padding:3mm;border-left:1.2mm solid var(--accent)}
+.legendgrid b{display:block;font-family:'JetBrains Mono';font-size:10pt;color:var(--ink)}
+.legendgrid span{font-size:8.4pt;color:#3A3F55}
+.exlib .ex{display:flex;gap:6mm;padding:3mm 0;border-bottom:1px solid var(--line);height:81mm}
+.exlib.first .ex{height:74mm}
+.exlib.first .ex .ph{height:68mm!important}
+.ex .ph{margin:0}
+.exbody{flex:1;position:relative}
+.exnum{position:absolute;right:0;top:0;font-family:'Inter Display';font-weight:900;font-size:24pt;color:#F1EDE8;line-height:1}
+.ex h2{margin:1mm 0 1.5mm;font-size:14pt}
+.exmeta{display:flex;flex-direction:column;gap:.4mm;font-size:8.4pt;color:#3A3F55;margin-bottom:2mm}
+.ex ol{font-size:8.8pt}
+.exfoot{display:grid;grid-template-columns:1fr 1fr;gap:3mm;font-size:8.2pt;line-height:1.35}
+.exerr{background:#FFF7DE;border-radius:2mm;padding:2mm 2.6mm}
+.exerr b{color:#A87400}
+.exhome{background:#EAF2FF;border-radius:2mm;padding:2mm 2.6mm}
+.exhome b{color:var(--blue)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:2mm;margin:2mm 0 2mm}
+.wd{border-radius:2.5mm;padding:3mm 2mm;text-align:center;min-height:22mm}
+.wd b{display:block;font-family:'Inter Display';font-size:10.5pt;margin-bottom:1mm}
+.wd span{font-size:8pt;line-height:1.3;display:block}
+.wd.a{background:var(--accent);color:#fff}.wd.c{background:#FFE6A3}.wd.r{background:#EEF0F4;color:#4A4F66}
+.phasehead{display:flex;justify-content:space-between;align-items:flex-end}
+h2.day{display:flex;align-items:center;gap:3mm;font-size:13pt;margin-top:4mm}
+h2.day span{display:inline-flex;width:8mm;height:8mm;border-radius:2mm;background:var(--accent);color:#fff;align-items:center;justify-content:center;font-size:11pt}
+table.routine td{font-size:8.8pt;padding:2.2mm 2.4mm}
+table.routine td:first-child{font-weight:700}
+table.routine td:nth-child(2){color:#4A4F66}
+.proto h2{margin-top:1mm}
+.errgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3mm}
+.errgrid div{background:#FFF7DE;border-radius:2.5mm;padding:3mm;font-size:8.5pt;line-height:1.38;color:#3A3F55}
+.errgrid b{display:block;color:var(--ink);font-size:9.5pt;margin-bottom:.8mm}
+.measure{display:flex;gap:6mm;align-items:flex-start}
+.measure h3:first-child{margin-top:1mm}
+.tplhead{display:flex;justify-content:space-between;align-items:center;margin-top:5mm;font-size:9pt}
+.tplhead b{font-family:'Inter Display';font-size:11pt;color:var(--accent)}
+.tplhead span{color:var(--muted)}
+table.tpl td{height:11mm;background:#fff!important;border:1px solid #D9D5CF}
+table.tpl th{font-size:8pt}
+table.tpl th small{font-weight:400;opacity:.8}
+table.tpl.grid td{height:12.5mm}
+table.tpl.habits td{height:9mm;vertical-align:middle;font-size:8.8pt}
+table.tpl.habits td .cb{display:block;margin:0 auto}
+table.tpl.meals td{height:24mm}
+.tplfoot{display:flex;justify-content:space-between;font-size:8.6pt;color:#3A3F55;border:1px solid #D9D5CF;border-top:none;padding:2.4mm 3mm;margin-top:-3mm}
+.notes{border:1px solid #D9D5CF;border-radius:2mm;padding:3mm;min-height:28mm;font-size:9pt;margin-top:3mm}
+.notes.tall{min-height:40mm}
+.ai{display:flex;gap:3.5mm;padding:2.2mm 0;border-bottom:1px solid var(--line);font-size:8.4pt;line-height:1.38}
+.ain{flex:0 0 8mm;height:8mm;border-radius:2mm;background:var(--accent);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:8.5pt}
+.aif{color:var(--muted);font-weight:400}
+.aid{color:#3A3F55;margin:.5mm 0}
+.aip{font-family:'JetBrains Mono',monospace;font-size:7.2pt;color:#5A5F75;background:#F6F4F1;border-radius:1.5mm;padding:1.4mm 2mm;line-height:1.4}
+.endpage{background:var(--ink);color:#fff}
+.endpage .end{padding-top:40mm}
+.endpage h1{font-size:40pt;color:#fff}
+.endpage .lead{color:#C9CCD8}
+.endpage ol{font-size:11pt;color:#fff}
+.endpage .share{border:1px solid var(--accent);border-radius:3mm;padding:2mm 6mm 3mm;margin:10mm 0 8mm}
+.endpage .share h3{color:var(--accent)}
+.endpage .muted{color:#9DA1B3}
+</style></head><body><section class="page cover" data-n="1">
+<div class="cover-top">
+  <div class="cover-kicker">GUÍA PRÁCTICA · 12 SEMANAS</div>
+  <div class="cover-title">MÉTODO<br><span>DEFINE</span></div>
+  <div class="cover-sub">Pierde grasa sin dietas extremas: entrenamiento, nutrición y plantillas para conseguirlo paso a paso.</div>
+</div>
+<div class="ph dark" style="height:118mm;width:100%"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 01</span><div class="t">Imagen de portada</div><div class="d">Persona en forma, sonriente y segura, de pie en un gimnasio luminoso con una mancuerna en la mano. Ropa deportiva negra con detalles naranjas. Encuadre de cintura para arriba, fondo oscuro desenfocado.</div><div class="f">Formato vertical 3:4 · Prompt en el Anexo A (pág. 40)</div></div>
+<div class="cover-pills"><span>Entrenamiento gimnasio y casa</span><span>Plan de nutrición</span><span>Plantillas imprimibles</span></div>
+<div class="cover-author">por [Tu nombre o marca]</div>
+</section><section class="page " data-n="2">
+<div class="kicker">Antes de empezar</div>
+<h1>Aviso importante</h1>
+<div class="bar"></div>
+<p>Esta guía tiene una finalidad <b>informativa y educativa</b>. Recoge principios de entrenamiento y nutrición
+ampliamente aceptados para la pérdida de grasa en personas adultas y sanas.</p>
+<p><b>No sustituye el consejo de un médico, dietista-nutricionista ni de otro profesional sanitario.</b> Consulta con
+un profesional antes de empezar si:</p>
+<ul class=""><li>tienes alguna enfermedad (cardiovascular, diabetes, hipertensión, problemas renales…) o tomas medicación;</li><li>tienes una lesión o dolor articular;</li><li>estás embarazada o en periodo de lactancia;</li><li>tienes o has tenido algún trastorno de la conducta alimentaria;</li><li>eres menor de 18 años.</li></ul>
+<p>Si durante el ejercicio sientes dolor en el pecho, mareo, falta de aire anormal o dolor agudo, <b>detente
+inmediatamente</b> y busca atención médica.</p>
+<p>Los resultados varían de una persona a otra y dependen de muchos factores (constancia, punto de partida,
+genética, descanso, salud…). <b>Esta guía no garantiza ningún resultado concreto.</b></p>
+<div class="box key"><span class="lbl">Nuestra filosofía</span>Aquí no vas a encontrar dietas de 800 kcal, quemagrasas milagrosos ni promesas de «-10 kg en 2 semanas». Vas a encontrar un método sostenible que puedes mantener toda la vida.</div>
+<div class="legal">
+<p><b>© 2026 [Tu nombre o marca].</b> Todos los derechos reservados.</p>
+<p>Queda prohibida la reproducción, distribución, comunicación pública o transformación total o parcial de esta obra
+sin autorización expresa del autor. Esta copia es para uso personal del comprador.</p>
+<p>Versión 1.0 · Diseño y maquetación: [Tu nombre o marca]</p>
+</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>02</b></span></div></section><section class="page " data-n="3"><div class="kicker">Contenido</div><h1>Índice</h1><div class="bar"></div><div class="toc"><div class="row l1"><span>Cómo usar esta guía</span><span class="dots"></span><span class="pg">4</span></div><div class="row l1"><span>1. Cómo se pierde grasa de verdad</span><span class="dots"></span><span class="pg">5</span></div><div class="row l1"><span>2. Calcula tus números</span><span class="dots"></span><span class="pg">8</span></div><div class="row l1"><span>3. Nutrición sin complicaciones</span><span class="dots"></span><span class="pg">11</span></div><div class="row l2"><span>Menú semanal de ejemplo</span><span class="dots"></span><span class="pg">14</span></div><div class="row l2"><span>Recetas</span><span class="dots"></span><span class="pg">16</span></div><div class="row l1"><span>4. Entrenar para perder grasa</span><span class="dots"></span><span class="pg">19</span></div><div class="row l1"><span>5. Biblioteca de ejercicios</span><span class="dots"></span><span class="pg">23</span></div><div class="row l1"><span>6. Tu plan de 12 semanas</span><span class="dots"></span><span class="pg">27</span></div><div class="row l2"><span>Fase 1 · Base (semanas 1–4)</span><span class="dots"></span><span class="pg">28</span></div><div class="row l2"><span>Fase 2 · Construcción (semanas 5–8)</span><span class="dots"></span><span class="pg">29</span></div><div class="row l2"><span>Fase 3 · Definición (semanas 9–12)</span><span class="dots"></span><span class="pg">30</span></div><div class="row l2"><span>Protocolos de cardio</span><span class="dots"></span><span class="pg">31</span></div><div class="row l1"><span>7. Hábitos que marcan la diferencia</span><span class="dots"></span><span class="pg">32</span></div><div class="row l2"><span>Estancamientos y errores comunes</span><span class="dots"></span><span class="pg">33</span></div><div class="row l2"><span>Cómo medir tu progreso</span><span class="dots"></span><span class="pg">34</span></div><div class="row l1"><span>Plantillas imprimibles</span><span class="dots"></span><span class="pg">35</span></div><div class="row l1"><span>Anexo A · Lista de imágenes y prompts</span><span class="dots"></span><span class="pg">40</span></div></div><div class="foot"><span>MÉTODO DEFINE</span><span><b>03</b></span></div></section><section class="page " data-n="4">
+<div class="kicker">Bienvenida</div>
+<h1>Cómo usar esta guía</h1>
+<div class="bar"></div>
+<p class="lead">Perder grasa no va de fuerza de voluntad infinita. Va de tener un plan claro, entender por qué
+funciona y medir tu progreso. Eso es exactamente lo que tienes en tus manos.</p>
+<h2>Tu hoja de ruta en 5 pasos</h2>
+<div class="steps">
+  <div class="step"><b>1</b><div><h3>Entiende lo básico</h3><p>Lee los capítulos 1 y 2. Son 15 minutos y te ahorrarán meses de errores.</p></div></div>
+  <div class="step"><b>2</b><div><h3>Calcula tus números</h3><p>Usa la hoja del capítulo 2 para saber cuántas calorías y cuánta proteína necesitas.</p></div></div>
+  <div class="step"><b>3</b><div><h3>Elige dónde entrenar</h3><p>Todas las rutinas tienen versión de <b>gimnasio</b> y versión de <b>casa</b>.</p></div></div>
+  <div class="step"><b>4</b><div><h3>Imprime las plantillas</h3><p>Al final tienes registros de entrenamiento, hábitos, comidas y progreso.</p></div></div>
+  <div class="step"><b>5</b><div><h3>Revisa cada semana</h3><p>Una vez por semana, compara tus medias y ajusta solo si hace falta.</p></div></div>
+</div>
+<div class="cols2">
+<div>
+<h3>Qué vas a necesitar</h3>
+<ul class=""><li>Una báscula y una cinta métrica.</li><li>Acceso a un gimnasio <i>o</i> un par de mancuernas, una garrafa o una mochila con peso.</li><li>Una goma elástica (opcional, para casa).</li><li>Las plantillas impresas o una libreta.</li></ul>
+</div>
+<div>
+<h3>Iconos que verás</h3>
+<div class="box tip"><span class="lbl">Consejo</span>Trucos prácticos para aplicarlo en tu día a día.</div>
+<div class="box warn"><span class="lbl">Error típico</span>Fallos frecuentes que frenan el progreso.</div>
+</div>
+</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>04</b></span></div></section><section class="page " data-n="5">
+<div class="kicker">Capítulo 1</div><h1 class="chap">Cómo se pierde grasa de verdad</h1><div class="bar"></div><p class="lead">Olvida los trucos milagro. La pérdida de grasa sigue unas reglas sencillas, y cuando las entiendes dejas de depender de modas.</p>
+<div class="ph" style="height:78mm;width:100%"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 02</span><div class="t">Persona caminando al aire libre</div><div class="d">Persona caminando a paso ligero por un parque al amanecer, auriculares puestos, ropa deportiva cómoda, expresión tranquila y decidida.</div><div class="f">Formato horizontal 16:9 · Prompt en el Anexo A (pág. 40)</div></div>
+<h2>Las 3 ideas que debes llevarte</h2>
+<div class="cards3">
+  <div class="card"><div class="cnum">01</div><h3>Déficit calórico</h3><p>Solo pierdes grasa si, de media, gastas más energía de la que comes. Sin excepciones.</p></div>
+  <div class="card"><div class="cnum">02</div><h3>Proteger el músculo</h3><p>Entrenar fuerza y comer suficiente proteína hace que lo que pierdas sea grasa, no músculo.</p></div>
+  <div class="card"><div class="cnum">03</div><h3>Constancia</h3><p>Un plan «bueno» que cumples gana siempre a un plan «perfecto» que abandonas en dos semanas.</p></div>
+</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>05</b></span></div></section><section class="page " data-n="6">
+<h2 style="margin-top:0">El balance energético</h2>
+<p>Tu cuerpo funciona como una balanza. En un lado está la energía que comes y bebes; en el otro, la que gastas
+para vivir y moverte. Cuando durante semanas gastas un poco más de lo que comes (<b>déficit calórico</b>), tu cuerpo
+cubre la diferencia usando sus reservas: principalmente, la grasa.</p>
+
+<svg viewBox="0 0 520 216" width="100%" font-family="Inter">
+  <g transform="translate(0,24)">
+  <rect x="255" y="40" width="10" height="120" rx="3" fill="#15192B"/>
+  <path d="M200 175 h120 l-20 -18 h-80 z" fill="#15192B"/>
+  <g transform="rotate(7 260 45)">
+    <rect x="60" y="40" width="400" height="9" rx="4" fill="#15192B"/>
+    <line x1="100" y1="49" x2="80" y2="100" stroke="#15192B" stroke-width="2"/>
+    <line x1="100" y1="49" x2="150" y2="100" stroke="#15192B" stroke-width="2"/>
+    <path d="M65 100 h100 a50 22 0 0 1 -100 0z" fill="#FFB703"/>
+    <line x1="420" y1="49" x2="370" y2="100" stroke="#15192B" stroke-width="2"/>
+    <line x1="420" y1="49" x2="440" y2="100" stroke="#15192B" stroke-width="2"/>
+    <path d="M355 100 h100 a50 22 0 0 1 -100 0z" fill="#FF5A36"/>
+  </g>
+  <text x="115" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#15192B">ENERGÍA QUE ENTRA</text>
+  <text x="115" y="140" text-anchor="middle" font-size="11" fill="#6B7085">comida y bebida</text>
+  <text x="405" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="#15192B">ENERGÍA QUE GASTAS</text>
+  <text x="405" y="184" text-anchor="middle" font-size="11" fill="#6B7085">metabolismo + movimiento</text>
+  </g>
+  <text x="260" y="14" text-anchor="middle" font-size="12" font-weight="700" fill="#FF5A36">Si gastas más de lo que comes → usas tu grasa como energía</text>
+</svg>
+<h2>¿En qué gastas la energía?</h2>
+<p>Mucha gente cree que lo que más quema es el gimnasio. En realidad, el entrenamiento es la parte más pequeña del gasto
+diario. Mira el reparto:</p>
+
+<svg viewBox="0 0 520 92" width="100%" font-family="Inter">
+  <rect x="0" y="10" width="322" height="38" fill="#15192B" rx="4"/>
+  <rect x="322" y="10" width="104" height="38" fill="#FF5A36"/>
+  <rect x="426" y="10" width="52" height="38" fill="#FFB703"/>
+  <rect x="478" y="10" width="42" height="38" fill="#2D6CDF" rx="4"/>
+  <text x="161" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Metabolismo basal · 60–70 %</text>
+  <text x="374" y="34" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">NEAT 15–30 %</text>
+  <text x="452" y="34" text-anchor="middle" font-size="10" font-weight="700" fill="#15192B">Digestión</text>
+  <text x="499" y="34" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">Entreno</text>
+  <text x="0" y="68" font-size="10" fill="#6B7085">Reparto aproximado del gasto diario. Digestión ≈ 10 % · Entrenamiento ≈ 5–10 %.</text>
+  <text x="0" y="83" font-size="10" fill="#6B7085">El NEAT (pasos y movimiento diario) es la parte que más puedes cambiar.</text>
+</svg>
+<ul class=""><li><b>Metabolismo basal:</b> lo que gastas solo por estar vivo (respirar, mantener la temperatura, órganos…).</li><li><b>NEAT:</b> todo el movimiento que no es entrenamiento: caminar, subir escaleras, limpiar, estar de pie.</li><li><b>Digestión:</b> procesar la comida también gasta energía, sobre todo la proteína.</li><li><b>Entrenamiento:</b> importante para tu salud y tu músculo, pero no es lo que más calorías quema.</li></ul>
+<div class="box key"><span class="lbl">Dato clave</span>La pérdida de grasa se decide sobre todo en la <b>cocina</b> y en los <b>pasos diarios</b>. El entrenamiento de fuerza se encarga de que el peso que pierdas sea grasa y no músculo.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>06</b></span></div></section><section class="page " data-n="7">
+<h2 style="margin-top:0">Expectativas realistas</h2>
+<p>Un ritmo sano y sostenible de pérdida de grasa es de <b>entre el 0,5 % y el 1 % de tu peso corporal por semana</b>.
+Más rápido suele significar perder músculo, pasar hambre y recuperar el peso después.</p>
+<table class=""><thead><tr><th>Peso actual</th><th>Pérdida semanal recomendada</th><th>En 12 semanas (aprox.)</th></tr></thead><tbody><tr><td>60 kg</td><td>0,3 – 0,6 kg</td><td>3,5 – 7 kg</td></tr><tr><td>70 kg</td><td>0,35 – 0,7 kg</td><td>4 – 8 kg</td></tr><tr><td>80 kg</td><td>0,4 – 0,8 kg</td><td>5 – 9,5 kg</td></tr><tr><td>90 kg</td><td>0,45 – 0,9 kg</td><td>5,5 – 10,5 kg</td></tr></tbody></table>
+<p class="small muted">Cifras orientativas. El ritmo suele ser mayor al principio y más lento a medida que te acercas a tu objetivo.</p>
+<h2>Tu peso sube y baja cada día (y es normal)</h2>
+<p>El peso de la báscula cambia hasta 1–2 kg de un día para otro por el agua, la sal, los hidratos, la digestión o
+el ciclo menstrual. Por eso <b>no importa el peso de un día, sino la tendencia</b>. Fíjate en este ejemplo real de 4 semanas:</p>
+<svg viewBox="0 0 500 156" width="100%" font-family="Inter"><line x1="34" x2="490" y1="111.4" y2="111.4" stroke="#E6E2DD"/><text x="28" y="115.4" font-size="9.5" text-anchor="end" fill="#6B7085">73</text><line x1="34" x2="490" y1="78.3" y2="78.3" stroke="#E6E2DD"/><text x="28" y="82.3" font-size="9.5" text-anchor="end" fill="#6B7085">74</text><line x1="34" x2="490" y1="45.1" y2="45.1" stroke="#E6E2DD"/><text x="28" y="49.1" font-size="9.5" text-anchor="end" fill="#6B7085">75</text><line x1="34" x2="490" y1="12.0" y2="12.0" stroke="#E6E2DD"/><text x="28" y="16.0" font-size="9.5" text-anchor="end" fill="#6B7085">76</text>
+<polyline points="34.0,31.5 50.9,62.8 67.8,39.8 84.7,34.7 101.6,65.4 118.4,53.5 135.3,70.5 152.2,41.7 169.1,77.9 186.0,56.7 202.9,48.0 219.8,86.0 236.7,65.8 253.6,71.0 270.4,61.3 287.3,88.1 304.2,66.7 321.1,46.7 338.0,91.2 354.9,79.5 371.8,81.8 388.7,75.9 405.6,90.8 422.4,85.6 439.3,73.3 456.2,112.1 473.1,94.2 490.0,97.7" fill="none" stroke="#B9BCC8" stroke-width="1.4"/><circle cx="34.0" cy="31.5" r="2.6" fill="#B9BCC8"/><circle cx="50.9" cy="62.8" r="2.6" fill="#B9BCC8"/><circle cx="67.8" cy="39.8" r="2.6" fill="#B9BCC8"/><circle cx="84.7" cy="34.7" r="2.6" fill="#B9BCC8"/><circle cx="101.6" cy="65.4" r="2.6" fill="#B9BCC8"/><circle cx="118.4" cy="53.5" r="2.6" fill="#B9BCC8"/><circle cx="135.3" cy="70.5" r="2.6" fill="#B9BCC8"/><circle cx="152.2" cy="41.7" r="2.6" fill="#B9BCC8"/><circle cx="169.1" cy="77.9" r="2.6" fill="#B9BCC8"/><circle cx="186.0" cy="56.7" r="2.6" fill="#B9BCC8"/><circle cx="202.9" cy="48.0" r="2.6" fill="#B9BCC8"/><circle cx="219.8" cy="86.0" r="2.6" fill="#B9BCC8"/><circle cx="236.7" cy="65.8" r="2.6" fill="#B9BCC8"/><circle cx="253.6" cy="71.0" r="2.6" fill="#B9BCC8"/><circle cx="270.4" cy="61.3" r="2.6" fill="#B9BCC8"/><circle cx="287.3" cy="88.1" r="2.6" fill="#B9BCC8"/><circle cx="304.2" cy="66.7" r="2.6" fill="#B9BCC8"/><circle cx="321.1" cy="46.7" r="2.6" fill="#B9BCC8"/><circle cx="338.0" cy="91.2" r="2.6" fill="#B9BCC8"/><circle cx="354.9" cy="79.5" r="2.6" fill="#B9BCC8"/><circle cx="371.8" cy="81.8" r="2.6" fill="#B9BCC8"/><circle cx="388.7" cy="75.9" r="2.6" fill="#B9BCC8"/><circle cx="405.6" cy="90.8" r="2.6" fill="#B9BCC8"/><circle cx="422.4" cy="85.6" r="2.6" fill="#B9BCC8"/><circle cx="439.3" cy="73.3" r="2.6" fill="#B9BCC8"/><circle cx="456.2" cy="112.1" r="2.6" fill="#B9BCC8"/><circle cx="473.1" cy="94.2" r="2.6" fill="#B9BCC8"/><circle cx="490.0" cy="97.7" r="2.6" fill="#B9BCC8"/>
+<polyline points="84.7,51.2 202.9,63.9 321.1,73.6 439.3,89.9" fill="none" stroke="#FF5A36" stroke-width="3"/><circle cx="84.7" cy="51.2" r="5" fill="#FF5A36" stroke="#fff" stroke-width="2"/><text x="84.7" y="41.2" font-size="10" text-anchor="middle" font-weight="700" fill="#FF5A36">74.8</text><circle cx="202.9" cy="63.9" r="5" fill="#FF5A36" stroke="#fff" stroke-width="2"/><text x="202.9" y="53.9" font-size="10" text-anchor="middle" font-weight="700" fill="#FF5A36">74.4</text><circle cx="321.1" cy="73.6" r="5" fill="#FF5A36" stroke="#fff" stroke-width="2"/><text x="321.1" y="63.6" font-size="10" text-anchor="middle" font-weight="700" fill="#FF5A36">74.1</text><circle cx="439.3" cy="89.9" r="5" fill="#FF5A36" stroke="#fff" stroke-width="2"/><text x="439.3" y="79.9" font-size="10" text-anchor="middle" font-weight="700" fill="#FF5A36">73.6</text><text x="84.7" y="150" font-size="10" text-anchor="middle" fill="#6B7085">Semana 1</text><text x="202.9" y="150" font-size="10" text-anchor="middle" fill="#6B7085">Semana 2</text><text x="321.1" y="150" font-size="10" text-anchor="middle" fill="#6B7085">Semana 3</text><text x="439.3" y="150" font-size="10" text-anchor="middle" fill="#6B7085">Semana 4</text></svg>
+<div class="legend"><span class="lg grey"></span>Peso diario <span class="lg orange"></span>Media semanal (kg)</div>
+<div class="box warn"><span class="lbl">Error típico</span>Pesarse un lunes después de una cena con amigos, ver +1 kg y abandonar. Ese kilo es agua y comida en tránsito, no grasa. Para ganar 1 kg de grasa harían falta unas 7.000 kcal de más.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>07</b></span></div></section><section class="page " data-n="8">
+<div class="kicker">Capítulo 2</div><h1 class="chap">Calcula tus números</h1><div class="bar"></div><p class="lead">Con 3 datos y 5 minutos vas a saber cuántas calorías y cuánta proteína necesitas. Sin adivinar.</p>
+<h2>Paso 1 · Tu metabolismo basal (TMB)</h2>
+<p>Usamos la fórmula de <b>Mifflin-St Jeor</b>, una de las más precisas para la población general:</p>
+<div class="formula"><span>Hombres</span>TMB = (10 × peso en kg) + (6,25 × altura en cm) − (5 × edad) <b>+ 5</b></div>
+<div class="formula"><span>Mujeres</span>TMB = (10 × peso en kg) + (6,25 × altura en cm) − (5 × edad) <b>− 161</b></div>
+<h2>Paso 2 · Tu gasto diario (mantenimiento)</h2>
+<p>Multiplica tu TMB por tu factor de actividad. El resultado son las calorías que mantienen tu peso estable.</p>
+<table class=""><colgroup><col style="width:24%"><col style="width:60%"><col style="width:16%"></colgroup><thead><tr><th>Nivel de actividad</th><th>Descripción</th><th>Factor</th></tr></thead><tbody><tr><td>Sedentario</td><td>Trabajo sentado, menos de 5.000 pasos, sin entrenar</td><td>× 1,2</td></tr><tr><td>Ligero</td><td>Entrenas 1–3 días/semana o caminas bastante</td><td>× 1,375</td></tr><tr><td>Moderado</td><td>Entrenas 3–5 días/semana y te mueves a diario</td><td>× 1,55</td></tr><tr><td>Muy activo</td><td>Entrenas 6–7 días o trabajo físico</td><td>× 1,725</td></tr></tbody></table>
+<div class="box tip"><span class="lbl">Consejo</span>Si dudas entre dos niveles, elige <b>el más bajo</b>. Casi todos sobreestimamos lo que nos movemos.</div>
+<h2>Paso 3 · Tus calorías para perder grasa</h2>
+<p>Resta entre un <b>15 % y un 25 %</b> a tus calorías de mantenimiento. Te recomendamos empezar con un <b>20 %</b>:</p>
+<div class="formula"><span>Objetivo</span>Calorías objetivo = Mantenimiento × 0,80</div>
+<div class="box warn"><span class="lbl">Cuidado</span>Recortar a lo bestia. Sin supervisión profesional, no bajes de unas 1.200 kcal (mujeres) o 1.500 kcal (hombres) ni por debajo de tu TMB. Un déficit enorme dispara el hambre y hace que pierdas músculo.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>08</b></span></div></section><section class="page " data-n="9">
+<h2 style="margin-top:0">Paso 4 · Reparte tus macronutrientes</h2>
+<p>Las calorías deciden si pierdes peso. Los macronutrientes deciden <b>qué</b> pierdes (grasa o músculo) y cómo te sientes.</p>
+<div class="macros">
+  <div class="macro p"><div class="mt">Proteína</div><div class="mv">1,6 – 2,2 g</div><div class="mu">por kg de peso · 4 kcal/g</div><p>Protege el músculo y es la que más sacia. Empieza con 1,8 g/kg.</p></div>
+  <div class="macro g"><div class="mt">Grasas</div><div class="mv">0,7 – 1 g</div><div class="mu">por kg de peso · 9 kcal/g</div><p>Necesarias para tus hormonas. Empieza con 0,8 g/kg.</p></div>
+  <div class="macro c"><div class="mt">Hidratos</div><div class="mv">El resto</div><div class="mu">de tus calorías · 4 kcal/g</div><p>Tu gasolina para entrenar con energía.</p></div>
+</div>
+<h2>Ejemplo resuelto: Laura</h2>
+<p class="small muted">30 años · 68 kg · 165 cm · entrena 2–3 días y camina poco (factor ligero)</p>
+<table class=""><colgroup><col style="width:24%"><col style="width:50%"><col style="width:26%"></colgroup><thead><tr><th>Paso</th><th>Cálculo</th><th>Resultado</th></tr></thead><tbody><tr><td>1. TMB</td><td>(10 × 68) + (6,25 × 165) − (5 × 30) − 161</td><td>≈ 1.400 kcal</td></tr><tr><td>2. Mantenimiento</td><td>1.400 × 1,375</td><td>≈ 1.925 kcal</td></tr><tr><td>3. Objetivo (−20 %)</td><td>1.925 × 0,80</td><td><b>≈ 1.550 kcal</b></td></tr><tr><td>4a. Proteína</td><td>68 × 1,8 = 122 g → 122 × 4</td><td>122 g · 490 kcal</td></tr><tr><td>4b. Grasas</td><td>68 × 0,8 = 54 g → 54 × 9</td><td>54 g · 485 kcal</td></tr><tr><td>4c. Hidratos</td><td>(1.550 − 490 − 485) ÷ 4</td><td>≈ 145 g</td></tr></tbody></table>
+<h2>Ejemplo rápido: Carlos</h2>
+<p class="small muted">35 años · 85 kg · 178 cm · entrena 4 días y trabaja de pie (factor moderado)</p>
+<table class=""><thead><tr><th>TMB</th><th>Mantenimiento</th><th>Objetivo</th><th>Proteína</th><th>Grasas</th><th>Hidratos</th></tr></thead><tbody><tr><td>≈ 1.790</td><td>≈ 2.780</td><td><b>≈ 2.200 kcal</b></td><td>153 g</td><td>68 g</td><td>≈ 245 g</td></tr></tbody></table>
+<div class="box tip"><span class="lbl">Consejo</span>No hace falta que cuadres los gramos al milímetro. Si cada día aciertas tus calorías ±100 kcal y llegas a tu proteína, vas por el buen camino.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>09</b></span></div></section><section class="page " data-n="10">
+<div class="kicker">Plantilla</div>
+<h1>Tu hoja de cálculo</h1>
+<div class="bar"></div>
+<p>Rellénala con lápiz. La volverás a usar cada vez que recalcules.</p>
+<div class="sheet">
+  <h3>Mis datos</h3>
+  <div class="fields3"><div class="field"><span>Peso</span><i></i><em>kg</em></div><div class="field"><span>Altura</span><i></i><em>cm</em></div><div class="field"><span>Edad</span><i></i><em>años</em></div></div>
+  <div class="fields2"><div class="field"><span>Sexo</span><i></i><em></em></div><div class="field"><span>Fecha</span><i></i><em></em></div></div>
+  <h3>Mis calorías</h3>
+  <div class="field"><span>1. TMB (fórmula del paso 1)</span><i></i><em>kcal</em></div>
+  <div class="field"><span>2. Factor de actividad</span><i></i><em>×</em></div>
+  <div class="field"><span>3. Mantenimiento (TMB × factor)</span><i></i><em>kcal</em></div>
+  <div class="field"><span>4. Calorías objetivo (mantenimiento × 0,80)</span><i></i><em>kcal</em></div>
+  <h3>Mis macros</h3>
+  <div class="field"><span>Proteína: peso × 1,8 =</span><i></i><em>g/día</em></div>
+  <div class="field"><span>Grasas: peso × 0,8 =</span><i></i><em>g/día</em></div>
+  <div class="field"><span>Hidratos: (objetivo − proteína×4 − grasas×9) ÷ 4 =</span><i></i><em>g/día</em></div>
+  <h3>Mis objetivos de hábitos</h3>
+  <div class="fields2"><div class="field"><span>Pasos diarios</span><i></i><em>pasos</em></div><div class="field"><span>Días de entreno</span><i></i><em>/semana</em></div></div>
+</div>
+<div class="box key"><span class="lbl">¿Cuándo recalcular?</span>Recalcula cuando hayas perdido 4–5 kg, o si llevas <b>3 semanas seguidas</b> sin que baje tu media semanal (y estás cumpliendo el plan).</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>10</b></span></div></section><section class="page " data-n="11">
+<div class="kicker">Capítulo 3</div><h1 class="chap">Nutrición sin complicaciones</h1><div class="bar"></div><p class="lead">Comida normal, de supermercado y con sabor. Sin alimentos prohibidos: solo con cantidades y elecciones inteligentes.</p>
+<h2>El método del plato</h2>
+<p>¿No te apetece contar calorías todos los días? Construye tus comidas principales así y estarás muy cerca de tus números:</p>
+
+<svg viewBox="0 0 520 250" width="100%" font-family="Inter">
+  <circle cx="140" cy="125" r="118" fill="#F2EFEA"/>
+  <circle cx="140" cy="125" r="104" fill="#fff" stroke="#E6E2DD" stroke-width="2"/>
+  <path d="M140 125 L140 21 A104 104 0 0 0 140 229 Z" fill="#7BC67E"/>
+  <path d="M140 125 L140 21 A104 104 0 0 1 244 125 Z" fill="#FF5A36"/>
+  <path d="M140 125 L244 125 A104 104 0 0 1 140 229 Z" fill="#FFB703"/>
+  <text x="88" y="130" text-anchor="middle" font-size="15" font-weight="800" fill="#fff">½</text>
+  <text x="88" y="148" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">VERDURAS</text>
+  <text x="182" y="88" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">¼</text>
+  <text x="182" y="104" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">PROTEÍNA</text>
+  <text x="182" y="165" text-anchor="middle" font-size="14" font-weight="800" fill="#15192B">¼</text>
+  <text x="182" y="181" text-anchor="middle" font-size="10" font-weight="700" fill="#15192B">HIDRATOS</text>
+  <circle cx="262" cy="40" r="14" fill="#2D6CDF"/><text x="262" y="45" text-anchor="middle" font-size="13" fill="#fff" font-weight="800">+</text>
+  <text x="282" y="36" font-size="11" font-weight="700" fill="#15192B">Grasa saludable</text>
+  <text x="282" y="51" font-size="10" fill="#6B7085">AOVE, aguacate o frutos secos</text>
+  <g font-size="11" fill="#15192B">
+    <rect x="300" y="78" width="12" height="12" rx="3" fill="#7BC67E"/><text x="320" y="88" font-weight="700">Verduras y hortalizas</text>
+    <text x="320" y="103" fill="#6B7085" font-size="10">Ensalada, brócoli, pimiento…</text>
+    <rect x="300" y="122" width="12" height="12" rx="3" fill="#FF5A36"/><text x="320" y="132" font-weight="700">Proteína</text>
+    <text x="320" y="147" fill="#6B7085" font-size="10">Pollo, pescado, huevos, tofu…</text>
+    <rect x="300" y="166" width="12" height="12" rx="3" fill="#FFB703"/><text x="320" y="176" font-weight="700">Hidratos de calidad</text>
+    <text x="320" y="191" fill="#6B7085" font-size="10">Arroz, patata, pasta, avena…</text>
+  </g>
+</svg>
+<h2>Tu mano como medida</h2>
+<table class=""><colgroup><col style="width:18%"><col style="width:24%"><col style="width:58%"></colgroup><thead><tr><th>Grupo</th><th>Ración por comida</th><th>Equivale a…</th></tr></thead><tbody><tr><td>Proteína</td><td>1–2 palmas</td><td>100–150 g de carne o pescado, 2–3 huevos</td></tr><tr><td>Hidratos</td><td>1 puño</td><td>½–1 taza de arroz o pasta cocidos, 1 patata mediana</td></tr><tr><td>Verduras</td><td>2 puños</td><td>Un buen plato de ensalada o verdura</td></tr><tr><td>Grasas</td><td>1 pulgar</td><td>1 cucharada de aceite, 1 puñado pequeño de frutos secos</td></tr></tbody></table>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>11</b></span></div></section><section class="page " data-n="12">
+<h2 style="margin-top:0">La proteína, tu mejor aliada</h2>
+<p>Comer suficiente proteína mientras pierdes grasa tiene tres ventajas enormes: <b>protege tu músculo</b>, es el
+nutriente que <b>más sacia</b> y tu cuerpo <b>gasta más energía</b> en digerirla. Repártela en 3–4 comidas de 25–40 g.</p>
+<table class=""><colgroup><col style="width:44%"><col style="width:32%"><col style="width:24%"></colgroup><thead><tr><th>Alimento</th><th>Ración</th><th>Proteína aprox.</th></tr></thead><tbody><tr><td>Pechuga de pollo o pavo</td><td>100 g (en crudo)</td><td>22–23 g</td></tr><tr><td>Ternera magra</td><td>100 g (en crudo)</td><td>21 g</td></tr><tr><td>Merluza u otro pescado blanco</td><td>150 g</td><td>25 g</td></tr><tr><td>Salmón</td><td>100 g</td><td>20 g</td></tr><tr><td>Atún al natural</td><td>1 lata (≈ 80 g escurrido)</td><td>20 g</td></tr><tr><td>Huevos</td><td>2 unidades</td><td>13 g</td></tr><tr><td>Claras de huevo</td><td>150 ml</td><td>16 g</td></tr><tr><td>Skyr o yogur griego 0 %</td><td>200 g</td><td>20 g</td></tr><tr><td>Queso fresco batido 0 %</td><td>250 g</td><td>20 g</td></tr><tr><td>Tofu firme</td><td>150 g</td><td>18–20 g</td></tr><tr><td>Lentejas o garbanzos cocidos</td><td>200 g</td><td>16–18 g</td></tr></tbody></table>
+<div class="cols2">
+<div><div class="box key"><span class="lbl">Dato clave</span><b>Alimentos que más sacian:</b> verduras, legumbres, patata cocida, fruta entera, avena, huevos y yogur. Úsalos para no pasar hambre.</div></div>
+<div><div class="box warn"><span class="lbl">Error típico</span>Olvidarse de lo que se bebe. Refrescos, zumos y alcohol suman muchas calorías sin saciar. El alcohol aporta 7 kcal por gramo.</div></div>
+</div>
+<div class="box tip"><span class="lbl">Consejo</span>Truco fácil: empieza cada comida principal por la proteína y la verdura. Llegarás antes a la saciedad y comerás menos sin darte cuenta.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>12</b></span></div></section><section class="page " data-n="13">
+<div class="kicker">Plantilla</div>
+<h1>Lista de la compra base</h1>
+<div class="bar"></div>
+<p>Con esta lista puedes preparar todas las comidas y recetas de la guía. Marca lo que necesites y llévala al súper.</p>
+<div class="shopgrid">
+<div class="shop"><h3>Proteínas</h3><ul class="checks"><li><span class="cb"></span>Pechuga de pollo / pavo</li><li><span class="cb"></span>Ternera magra</li><li><span class="cb"></span>Salmón</li><li><span class="cb"></span>Merluza o bacalao</li><li><span class="cb"></span>Atún al natural (latas)</li><li><span class="cb"></span>Huevos y claras</li><li><span class="cb"></span>Pavo o jamón serrano en lonchas</li><li><span class="cb"></span>Tofu firme</li></ul></div>
+<div class="shop"><h3>Lácteos</h3><ul class="checks"><li><span class="cb"></span>Skyr o yogur griego 0 %</li><li><span class="cb"></span>Queso fresco batido 0 %</li><li><span class="cb"></span>Leche o bebida vegetal</li><li><span class="cb"></span>Queso fresco tipo Burgos</li></ul></div>
+<div class="shop"><h3>Hidratos</h3><ul class="checks"><li><span class="cb"></span>Arroz (blanco o integral)</li><li><span class="cb"></span>Patatas</li><li><span class="cb"></span>Copos de avena</li><li><span class="cb"></span>Pan integral</li><li><span class="cb"></span>Pasta o fideos de arroz</li><li><span class="cb"></span>Legumbres cocidas (bote)</li><li><span class="cb"></span>Quinoa o cuscús</li></ul></div>
+<div class="shop"><h3>Verduras</h3><ul class="checks"><li><span class="cb"></span>Espinacas / mezclum</li><li><span class="cb"></span>Brócoli</li><li><span class="cb"></span>Calabacín</li><li><span class="cb"></span>Pimientos</li><li><span class="cb"></span>Tomates y pepino</li><li><span class="cb"></span>Champiñones</li><li><span class="cb"></span>Cebolla y ajo</li><li><span class="cb"></span>Verduras congeladas para wok</li></ul></div>
+<div class="shop"><h3>Frutas</h3><ul class="checks"><li><span class="cb"></span>Plátanos</li><li><span class="cb"></span>Manzanas</li><li><span class="cb"></span>Frutos rojos (congelados)</li><li><span class="cb"></span>Naranjas o mandarinas</li><li><span class="cb"></span>Fruta de temporada</li></ul></div>
+<div class="shop"><h3>Grasas y despensa</h3><ul class="checks"><li><span class="cb"></span>Aceite de oliva virgen extra</li><li><span class="cb"></span>Aguacate</li><li><span class="cb"></span>Nueces o almendras</li><li><span class="cb"></span>Semillas de chía</li><li><span class="cb"></span>Especias, salsa de soja, mostaza</li><li><span class="cb"></span>Café e infusiones</li></ul></div>
+</div>
+<div class="box tip"><span class="lbl">Batch cooking</span>Haz la compra una vez a la semana con lista y dedica 1 hora el domingo a cocinar proteína, arroz y verduras para 3–4 días. Es el hábito que más ayuda a cumplir la dieta.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>13</b></span></div></section><section class="page " data-n="14">
+<div class="kicker">Ejemplo de menú</div>
+<h1>Una semana de comidas</h1>
+<div class="bar"></div>
+<p>Menú orientativo de unas <b>1.500–1.700 kcal</b> y más de 110 g de proteína al día. Si tus calorías son más altas,
+aumenta las raciones de hidratos y grasas; si son más bajas, redúcelas. Las recetas marcadas con ★ las tienes en las páginas siguientes.</p>
+<table class="menu"><colgroup><col style="width:16%"><col style="width:21.0%"><col style="width:21.0%"><col style="width:21.0%"><col style="width:21.0%"></colgroup><thead><tr><th></th><th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th></tr></thead><tbody><tr><td><b>Desayuno</b></td><td>Overnight oats con frutos rojos ★</td><td>Tostada integral con tomate, AOVE y pavo + café con leche</td><td>Yogur griego con 30 g de avena y fruta</td><td>Overnight oats con frutos rojos ★</td></tr><tr><td><b>Comida</b></td><td>Bowl de pollo, arroz y verduras ★</td><td>Lentejas estofadas con verduras + 1 fruta</td><td>Ensalada de garbanzos y atún ★</td><td>Wok de ternera y verduras ★</td></tr><tr><td><b>Merienda</b></td><td>1 yogur natural + 1 pieza de fruta</td><td>Skyr con 15 g de nueces</td><td>1 manzana + queso fresco batido</td><td>Vaso de leche + 1 plátano</td></tr><tr><td><b>Cena</b></td><td>Tortilla de claras con espinacas ★ + ensalada</td><td>Merluza a la plancha con verduras asadas</td><td>Salmón al horno con patata y brócoli ★</td><td>Revuelto de 2 huevos con champiñones + pan integral</td></tr></tbody></table>
+<div class="box tip"><span class="lbl">Consejo</span>Repetir comidas no es aburrido, es práctico. La mayoría de personas que pierden grasa con éxito comen 10–15 platos que les gustan y los van rotando.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>14</b></span></div></section><section class="page " data-n="15">
+<table class="menu"><colgroup><col style="width:16%"><col style="width:28.0%"><col style="width:28.0%"><col style="width:28.0%"></colgroup><thead><tr><th></th><th>Viernes</th><th>Sábado</th><th>Domingo</th></tr></thead><tbody><tr><td><b>Desayuno</b></td><td>Tostada integral con aguacate y huevo a la plancha</td><td>Tortitas de avena y claras con fruta</td><td>Café con leche + tostada con tomate y jamón serrano</td></tr><tr><td><b>Comida</b></td><td>Pollo al horno con patata y ensalada</td><td>Paella (ración moderada) + ensalada grande</td><td>Comida libre con cabeza (ver consejo)</td></tr><tr><td><b>Merienda</b></td><td>1 yogur natural + 1 pieza de fruta</td><td>1 pieza de fruta</td><td>Skyr con frutos rojos</td></tr><tr><td><b>Cena</b></td><td>Crema de calabacín + pavo a la plancha</td><td>Ensalada completa: atún, huevo, garbanzos y verduras</td><td>Tortilla de claras con verduras ★</td></tr></tbody></table>
+<h2>Comer fuera y fines de semana</h2>
+<div class="cols2">
+<div>
+<h3>En el restaurante</h3>
+<ul class=""><li>Elige un plato con proteína clara: pescado, carne a la plancha, legumbres.</li><li>Pide la guarnición de ensalada o verduras en lugar de patatas fritas.</li><li>Pan o postre: uno de los dos, no ambos.</li><li>Bebe agua, refresco zero o una sola caña/copa.</li></ul>
+</div>
+<div>
+<h3>La «comida libre con cabeza»</h3>
+<ul class=""><li>Una comida a la semana sin contar, pero sin atracón.</li><li>Come despacio y para cuando estés satisfecho, no lleno.</li><li>Al día siguiente, vuelve a tu plan normal sin compensar ni castigarte.</li><li>Es una comida, no un fin de semana entero.</li></ul>
+</div>
+</div>
+<div class="box warn"><span class="lbl">Error típico</span>Cumplir de lunes a viernes y «desmadrarse» el fin de semana. Dos días muy por encima pueden borrar todo el déficit de la semana. El objetivo es que los fines de semana se parezcan bastante al resto.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>15</b></span></div></section><section class="page " data-n="16"><div class="kicker">Recetas</div><h1>Recetas fáciles y saciantes</h1><div class="bar"></div><div class="recipe">
+  <div class="ph" style="height:96mm;width:72mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 03</span><div class="t">Overnight oats con frutos rojos</div><div class="d">Tarro de cristal con overnight oats en capas: avena cremosa, yogur blanco y frutos rojos encima, sobre una mesa de madera clara con luz de mañana.</div><div class="f">Formato vertical 4:5 · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="rbody">
+    <h2>Overnight oats con frutos rojos</h2>
+    <div class="badges"><span>360 kcal</span><span>27 g proteína</span><span>⏱ 5 min + noche</span><span>1 ración</span></div>
+    <h3>Ingredientes</h3><ul class="small"><li>40 g de copos de avena</li><li>200 g de skyr o yogur griego 0 %</li><li>100 g de frutos rojos (pueden ser congelados)</li><li>10 g de semillas de chía</li><li>Canela y unas gotas de vainilla</li></ul><h3>Preparación</h3><ol class="small"><li>Mezcla en un tarro la avena, el skyr, la chía y la canela.</li><li>Añade un chorrito de leche si te gusta más líquido.</li><li>Cubre con los frutos rojos y deja en la nevera toda la noche.</li><li>Por la mañana, remueve y listo. Dura 2 días en la nevera.</li></ol>
+    <div class="rtip"><b>Truco:</b> Prepara 2 tarros a la vez y tendrás dos desayunos listos. Variante: cambia los frutos rojos por plátano y canela.</div>
+  </div></div><div class="recipe">
+  <div class="ph" style="height:96mm;width:72mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 04</span><div class="t">Tortilla de claras con espinacas</div><div class="d">Tortilla francesa jugosa doblada, rellena de espinacas y queso fresco, en un plato blanco con una tostada integral al lado.</div><div class="f">Formato vertical 4:5 · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="rbody">
+    <h2>Tortilla de claras con espinacas</h2>
+    <div class="badges"><span>340 kcal</span><span>31 g proteína</span><span>⏱ 10 min</span><span>1 ración</span></div>
+    <h3>Ingredientes</h3><ul class="small"><li>1 huevo + 150 ml de claras</li><li>80 g de espinacas frescas</li><li>40 g de queso fresco tipo Burgos</li><li>1 rebanada de pan integral (40 g)</li><li>Sal, pimienta y un spray de aceite</li></ul><h3>Preparación</h3><ol class="small"><li>Saltea las espinacas 1 minuto en una sartén antiadherente.</li><li>Bate el huevo con las claras, sal y pimienta y viértelo sobre las espinacas.</li><li>Añade el queso troceado, tapa y cocina a fuego medio 3–4 minutos.</li><li>Dobla la tortilla y sirve con el pan tostado.</li></ol>
+    <div class="rtip"><b>Truco:</b> Añade champiñones, pimiento o cebolla: más volumen y saciedad por casi las mismas calorías.</div>
+  </div></div><p class="small muted">Valores nutricionales aproximados por ración.</p><div class="foot"><span>MÉTODO DEFINE</span><span><b>16</b></span></div></section><section class="page " data-n="17"><div class="recipe">
+  <div class="ph" style="height:96mm;width:72mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 05</span><div class="t">Bowl de pollo, arroz y verduras</div><div class="d">Bowl visto desde arriba con arroz blanco, tiras de pollo dorado con pimentón y verduras salteadas de colores.</div><div class="f">Formato vertical 4:5 · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="rbody">
+    <h2>Bowl de pollo, arroz y verduras</h2>
+    <div class="badges"><span>490 kcal</span><span>35 g proteína</span><span>⏱ 20 min</span><span>1 ración</span></div>
+    <h3>Ingredientes</h3><ul class="small"><li>130 g de pechuga de pollo</li><li>60 g de arroz (en crudo)</li><li>150 g de verduras (pimiento, calabacín, brócoli)</li><li>10 g de aceite de oliva virgen extra</li><li>Pimentón, ajo en polvo, sal y limón</li></ul><h3>Preparación</h3><ol class="small"><li>Cuece el arroz (o usa arroz ya cocido del batch cooking).</li><li>Corta el pollo en tiras y sazónalo con pimentón, ajo y sal.</li><li>Saltea el pollo con la mitad del aceite y reserva; saltea las verduras con el resto.</li><li>Monta el bowl y añade unas gotas de limón.</li></ol>
+    <div class="rtip"><b>Truco:</b> Con el batch cooking del domingo lo montas en 3 minutos. Variante: cambia el pollo por pavo o tofu.</div>
+  </div></div><div class="recipe">
+  <div class="ph" style="height:96mm;width:72mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 06</span><div class="t">Salmón al horno con patata y brócoli</div><div class="d">Lomo de salmón al horno dorado con rodajas de patata y ramilletes de brócoli en una bandeja de horno, con rodajas de limón.</div><div class="f">Formato vertical 4:5 · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="rbody">
+    <h2>Salmón al horno con patata y brócoli</h2>
+    <div class="badges"><span>520 kcal</span><span>34 g proteína</span><span>⏱ 30 min</span><span>1 ración</span></div>
+    <h3>Ingredientes</h3><ul class="small"><li>130 g de lomo de salmón</li><li>200 g de patata</li><li>150 g de brócoli</li><li>5 g de aceite de oliva virgen extra</li><li>Eneldo o perejil, limón, sal y pimienta</li></ul><h3>Preparación</h3><ol class="small"><li>Precalienta el horno a 200 °C. Corta la patata en rodajas finas y hornéala 15 minutos.</li><li>Añade a la bandeja el salmón y el brócoli con el aceite y las especias.</li><li>Hornea 12–15 minutos más hasta que el salmón esté hecho.</li><li>Sirve con limón por encima.</li></ol>
+    <div class="rtip"><b>Truco:</b> Usa papel de horno y una sola bandeja: cena completa y casi nada que fregar.</div>
+  </div></div><p class="small muted">Valores nutricionales aproximados por ración.</p><div class="foot"><span>MÉTODO DEFINE</span><span><b>17</b></span></div></section><section class="page " data-n="18"><div class="recipe">
+  <div class="ph" style="height:96mm;width:72mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 07</span><div class="t">Ensalada de garbanzos y atún</div><div class="d">Ensalada fresca de garbanzos con atún, tomate, pepino y cebolla morada en un bol de cerámica, vista cenital.</div><div class="f">Formato vertical 4:5 · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="rbody">
+    <h2>Ensalada de garbanzos y atún</h2>
+    <div class="badges"><span>410 kcal</span><span>32 g proteína</span><span>⏱ 10 min</span><span>1 ración</span></div>
+    <h3>Ingredientes</h3><ul class="small"><li>150 g de garbanzos cocidos (escurridos)</li><li>1 lata de atún al natural</li><li>1 tomate, ½ pepino y ¼ de cebolla morada</li><li>10 g de aceite de oliva virgen extra</li><li>Vinagre, orégano y sal</li></ul><h3>Preparación</h3><ol class="small"><li>Lava y escurre los garbanzos.</li><li>Trocea el tomate, el pepino y la cebolla.</li><li>Mezcla todo con el atún escurrido.</li><li>Aliña con aceite, vinagre, orégano y sal. Ideal para llevar en táper.</li></ol>
+    <div class="rtip"><b>Truco:</b> Lleva el aliño aparte en el táper para que la ensalada no se ablande. Perfecta para el trabajo.</div>
+  </div></div><div class="recipe">
+  <div class="ph" style="height:96mm;width:72mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 08</span><div class="t">Wok de ternera y verduras</div><div class="d">Wok humeante con tiras de ternera, fideos de arroz y verduras crujientes de colores, palillos al lado.</div><div class="f">Formato vertical 4:5 · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="rbody">
+    <h2>Wok de ternera y verduras</h2>
+    <div class="badges"><span>495 kcal</span><span>33 g proteína</span><span>⏱ 15 min</span><span>1 ración</span></div>
+    <h3>Ingredientes</h3><ul class="small"><li>130 g de ternera magra en tiras</li><li>200 g de verduras para wok</li><li>60 g de fideos de arroz (en crudo)</li><li>10 ml de salsa de soja baja en sal</li><li>5 g de aceite, jengibre y ajo</li></ul><h3>Preparación</h3><ol class="small"><li>Hidrata los fideos según el envase.</li><li>Saltea la ternera a fuego fuerte 2 minutos con el aceite, el ajo y el jengibre. Reserva.</li><li>Saltea las verduras 3–4 minutos para que queden crujientes.</li><li>Junta todo con los fideos y la salsa de soja, y saltea 1 minuto más.</li></ol>
+    <div class="rtip"><b>Truco:</b> Las verduras congeladas para wok son igual de nutritivas y te ahorran 10 minutos de cortar.</div>
+  </div></div><p class="small muted">Valores nutricionales aproximados por ración.</p><div class="foot"><span>MÉTODO DEFINE</span><span><b>18</b></span></div></section><section class="page " data-n="19">
+<div class="kicker">Capítulo 4</div><h1 class="chap">Entrenar para perder grasa</h1><div class="bar"></div><p class="lead">El objetivo del entrenamiento no es «quemar calorías», sino mantener (o ganar) músculo mientras pierdes grasa. Ese es el secreto de un cuerpo definido.</p>
+<div class="ph" style="height:70mm;width:100%"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 09</span><div class="t">Entrenamiento de fuerza en gimnasio</div><div class="d">Mujer haciendo remo con mancuerna en un banco, concentrada, gimnasio moderno y luminoso, buena técnica, espalda recta.</div><div class="f">Formato horizontal 16:9 · Prompt en el Anexo A (pág. 40)</div></div>
+<h2>Los 4 pilares del método</h2>
+<div class="pillars">
+  <div><b>1</b><h3>Fuerza</h3><p>3 días por semana de cuerpo completo. Le dice a tu cuerpo: «este músculo lo necesito».</p></div>
+  <div><b>2</b><h3>Pasos</h3><p>7.000–10.000 pasos diarios. Es el «cardio» que más grasa quema a la larga.</p></div>
+  <div><b>3</b><h3>Cardio</h3><p>Un complemento, no la base. De 1 a 3 sesiones cortas según la fase.</p></div>
+  <div><b>4</b><h3>Descanso</h3><p>Dormir 7–9 horas. Sin descanso no hay progreso ni control del hambre.</p></div>
+</div>
+<div class="box warn"><span class="lbl">Error típico</span>Hacer solo cardio para adelgazar. En déficit calórico, si no entrenas fuerza, una parte importante del peso que pierdes es músculo: acabas más pequeño, pero no más definido, y tu metabolismo baja.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>19</b></span></div></section><section class="page " data-n="20">
+<h2 style="margin-top:0">La clave: progresar poco a poco</h2>
+<p>Para que tu cuerpo mantenga el músculo, necesita un motivo. Ese motivo es la <b>sobrecarga progresiva</b>: hacer un
+poquito más con el tiempo (más repeticiones o más peso). Usaremos el sistema más sencillo y eficaz: la <b>doble progresión</b>.</p>
+<h3>Cómo funciona la doble progresión</h3>
+<ol class=""><li>Cada ejercicio tiene un rango de repeticiones, por ejemplo <b>3 × 8–12</b>.</li><li>Empieza con un peso que te permita hacer 8 repeticiones con buena técnica.</li><li>Cada sesión intenta hacer alguna repetición más con el mismo peso.</li><li>Cuando completes <b>12 repeticiones en todas las series</b>, sube el peso y vuelve a empezar desde 8.</li></ol>
+<table class=""><thead><tr><th>Semana</th><th>Serie 1</th><th>Serie 2</th><th>Serie 3</th><th>Qué haces</th></tr></thead><tbody><tr><td>1</td><td>10 kg × 9</td><td>10 kg × 8</td><td>10 kg × 8</td><td>Empiezas</td></tr><tr><td>2</td><td>10 kg × 11</td><td>10 kg × 10</td><td>10 kg × 9</td><td>Sumas repeticiones</td></tr><tr><td>3</td><td>10 kg × 12</td><td>10 kg × 12</td><td>10 kg × 12</td><td>¡Rango completado!</td></tr><tr><td>4</td><td>12 kg × 9</td><td>12 kg × 8</td><td>12 kg × 8</td><td>Subes peso y vuelves a 8</td></tr></tbody></table>
+<h2>¿Cuánto esfuerzo? La escala RIR</h2>
+<p>No hace falta llegar al fallo en cada serie. Lo ideal es terminar cada serie dejando <b>1–3 repeticiones en reserva</b>.</p>
+<svg viewBox="0 0 520 96" width="100%" font-family="Inter"><rect x="6" y="22" width="80" height="34" rx="5" fill="#D7263D"/><text x="46" y="45" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">Fallo</text><text x="46" y="78" text-anchor="middle" font-size="9" fill="#6B7085">Ni una más</text><rect x="91" y="22" width="80" height="34" rx="5" fill="#FF5A36"/><text x="131" y="45" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">1</text><text x="131" y="78" text-anchor="middle" font-size="9" fill="#6B7085">Quedaba 1</text><rect x="176" y="22" width="80" height="34" rx="5" fill="#FF8C42"/><text x="216" y="45" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">2</text><text x="216" y="78" text-anchor="middle" font-size="9" fill="#6B7085">Quedaban 2</text><rect x="261" y="22" width="80" height="34" rx="5" fill="#FFB703"/><text x="301" y="45" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">3</text><text x="301" y="78" text-anchor="middle" font-size="9" fill="#6B7085">Quedaban 3</text><rect x="346" y="22" width="80" height="34" rx="5" fill="#8AC926"/><text x="386" y="45" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">4</text><text x="386" y="78" text-anchor="middle" font-size="9" fill="#6B7085">Fácil</text><rect x="431" y="22" width="80" height="34" rx="5" fill="#52B788"/><text x="471" y="45" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">5+</text><text x="471" y="78" text-anchor="middle" font-size="9" fill="#6B7085">Muy fácil</text><rect x="89" y="14" width="250" height="50" rx="8" fill="none" stroke="#15192B" stroke-width="2.5" stroke-dasharray="5 4"/><text x="214" y="10" text-anchor="middle" font-size="10.5" font-weight="800" fill="#15192B">ZONA DE TRABAJO: RIR 1–3</text><text x="260" y="92" text-anchor="middle" font-size="10" fill="#6B7085">RIR = repeticiones en reserva (las que te quedaban «en el depósito» al terminar la serie)</text></svg>
+<div class="box tip"><span class="lbl">Consejo</span>La técnica va primero. Si para hacer una repetición más tienes que deformar el movimiento, esa repetición no cuenta.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>20</b></span></div></section><section class="page " data-n="21">
+<h2 style="margin-top:0">Pasos: el arma secreta</h2>
+<p>Caminar es fácil, no genera fatiga, no da más hambre como el cardio intenso y se puede hacer todos los días. Pasar de 4.000
+a 10.000 pasos diarios puede suponer <b>entre 200 y 350 kcal más de gasto al día</b>, según tu peso y ritmo.</p>
+<table class=""><thead><tr><th>Si ahora haces…</th><th>Objetivo semanas 1–4</th><th>Objetivo semanas 5–12</th></tr></thead><tbody><tr><td>Menos de 5.000 pasos</td><td>6.000–7.000</td><td>8.000–10.000</td></tr><tr><td>5.000–8.000 pasos</td><td>8.000–9.000</td><td>10.000+</td></tr><tr><td>Más de 8.000 pasos</td><td>Mantén</td><td>+1.000–2.000</td></tr></tbody></table>
+<h3>Ideas para sumar pasos sin darte cuenta</h3>
+<div class="cols2"><ul class=""><li>Paseo de 10–15 min después de comer y cenar.</li><li>Escaleras en lugar de ascensor.</li><li>Llamadas por teléfono caminando.</li></ul>
+<ul class=""><li>Bájate una parada antes del bus o metro.</li><li>Aparca más lejos.</li><li>Queda con amigos para caminar, no solo para tomar algo.</li></ul></div>
+<h2>Cardio: dos tipos, dos usos</h2>
+<table class=""><colgroup><col style="width:18%"><col style="width:41%"><col style="width:41%"></colgroup><thead><tr><th></th><th>LISS (baja intensidad)</th><th>HIIT (alta intensidad)</th></tr></thead><tbody><tr><td>Qué es</td><td>Caminar rápido, bici suave, elíptica</td><td>Intervalos cortos muy intensos con descansos</td></tr><tr><td>Duración</td><td>30–45 minutos</td><td>15–25 minutos</td></tr><tr><td>Intensidad</td><td>Puedes mantener una conversación</td><td>Al final de cada intervalo no puedes hablar</td></tr><tr><td>Ventajas</td><td>Poca fatiga, apto para todos los niveles</td><td>Muy eficiente en poco tiempo</td></tr><tr><td>Cuidado con</td><td>Que te quite tiempo de fuerza</td><td>No más de 2 por semana; fatiga acumulada</td></tr></tbody></table>
+<div class="box key"><span class="lbl">Dato clave</span>En la Fase 1 solo usamos LISS y pasos. El HIIT entra a partir de la semana 5, cuando ya tienes base.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>21</b></span></div></section><section class="page " data-n="22">
+<div class="kicker">Antes de cada sesión</div>
+<h1>Calentamiento de 8 minutos</h1>
+<div class="bar"></div>
+<p>Calentar prepara articulaciones y músculos, mejora tu rendimiento y reduce el riesgo de lesión. No te lo saltes.</p>
+<table class=""><colgroup><col style="width:22%"><col style="width:56%"><col style="width:22%"></colgroup><thead><tr><th>Bloque</th><th>Ejercicio</th><th>Cantidad</th></tr></thead><tbody><tr><td>1. Activación</td><td>Bici, elíptica, cinta o saltos suaves en casa</td><td>3 minutos</td></tr><tr><td>2. Movilidad</td><td>Círculos de cadera</td><td>10 por lado</td></tr><tr><td></td><td>Gato-camello (a cuatro patas)</td><td>8 repeticiones</td></tr><tr><td></td><td>Rotaciones torácicas a cuatro patas</td><td>6 por lado</td></tr><tr><td></td><td>Sentadilla profunda con pausa de 2 s</td><td>8 repeticiones</td></tr><tr><td></td><td>Puente de glúteo</td><td>10 repeticiones</td></tr><tr><td>3. Aproximación</td><td>1–2 series del primer ejercicio con poco peso</td><td>8–10 repeticiones</td></tr></tbody></table>
+<h2>Cómo leer las rutinas</h2>
+<div class="legendgrid">
+  <div><b>3 × 10–12</b><span>3 series de entre 10 y 12 repeticiones</span></div>
+  <div><b>Desc. 90 s</b><span>Descanso entre series</span></div>
+  <div><b>RIR 2</b><span>Termina la serie con 2 repeticiones en reserva</span></div>
+  <div><b>c/lado</b><span>Las repeticiones son por cada lado</span></div>
+  <div><b>SS</b><span>Superserie: dos ejercicios seguidos sin descanso</span></div>
+  <div><b>Casa</b><span>Alternativa con garrafa, mochila o goma</span></div>
+</div>
+<div class="box tip"><span class="lbl">Consejo</span>Si en casa no tienes mancuernas, una garrafa de 5–8 litros o una mochila con libros o botellas sirve para casi todos los ejercicios. Más adelante, unas mancuernas ajustables son la mejor inversión.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>22</b></span></div></section><section class="page exlib first" data-n="23"><div class="kicker">Capítulo 5</div><h1 class="chap sm">Biblioteca de ejercicios</h1><div class="bar"></div><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 10</span><div class="t">Sentadilla goblet</div><div class="d">Persona en la posición baja de la sentadilla goblet sujetando una mancuerna pegada al pecho, vista lateral.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">01</div><h2>Sentadilla goblet</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Cuádriceps, glúteos, core</span><span><b>Material:</b> Mancuerna o kettlebell</span></div>
+    <ol class="small"><li>Sujeta la mancuerna pegada al pecho, pies algo más abiertos que la cadera.</li><li>Baja sentándote entre tus talones, con el pecho alto.</li><li>Sube empujando el suelo con todo el pie.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Levantar los talones o que las rodillas se vayan hacia dentro.</div><div class="exhome"><b>⌂ Casa:</b> Con una garrafa o mochila pegada al pecho.</div></div>
+  </div></div><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 11</span><div class="t">Peso muerto rumano</div><div class="d">Persona inclinada con la cadera hacia atrás y espalda recta, mancuernas a la altura de las rodillas, vista lateral.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">02</div><h2>Peso muerto rumano</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Isquiotibiales, glúteos, espalda baja</span><span><b>Material:</b> Mancuernas o barra</span></div>
+    <ol class="small"><li>De pie, mancuernas delante de los muslos, rodillas ligeramente flexionadas.</li><li>Lleva la cadera atrás deslizando el peso pegado a las piernas.</li><li>Baja hasta notar estiramiento detrás del muslo y sube apretando glúteos.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Redondear la espalda o convertirlo en una sentadilla.</div><div class="exhome"><b>⌂ Casa:</b> Con mochila o garrafa sujeta con ambas manos.</div></div>
+  </div></div><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 12</span><div class="t">Hip thrust</div><div class="d">Persona haciendo hip thrust con la espalda apoyada en un banco y una barra sobre la cadera, en la posición alta.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">03</div><h2>Hip thrust</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Glúteos</span><span><b>Material:</b> Banco y barra o mancuerna</span></div>
+    <ol class="small"><li>Apoya la parte alta de la espalda en el banco y el peso sobre la cadera.</li><li>Pies apoyados a la anchura de la cadera, barbilla al pecho.</li><li>Sube la cadera hasta alinear rodillas, cadera y hombros; aprieta 1 s.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Arquear la zona lumbar en lugar de subir con el glúteo.</div><div class="exhome"><b>⌂ Casa:</b> Espalda en el sofá y mochila sobre la cadera.</div></div>
+  </div></div><div class="foot"><span>MÉTODO DEFINE</span><span><b>23</b></span></div></section><section class="page exlib" data-n="24"><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 13</span><div class="t">Zancada atrás</div><div class="d">Persona en posición baja de zancada hacia atrás con mancuernas a los lados, vista lateral.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">04</div><h2>Zancada atrás</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Cuádriceps, glúteos, equilibrio</span><span><b>Material:</b> Mancuernas (opcional)</span></div>
+    <ol class="small"><li>De pie, da un paso largo hacia atrás.</li><li>Baja hasta que la rodilla de atrás casi toque el suelo.</li><li>Vuelve empujando con la pierna de delante.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Dar un paso demasiado corto o inclinar el tronco hacia delante.</div><div class="exhome"><b>⌂ Casa:</b> Igual, con peso corporal o mochila.</div></div>
+  </div></div><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 14</span><div class="t">Press de banca con mancuernas</div><div class="d">Persona tumbada en un banco empujando dos mancuernas hacia arriba, codos a unos 45°.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">05</div><h2>Press de banca con mancuernas</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Pectoral, tríceps, hombro</span><span><b>Material:</b> Banco y mancuernas</span></div>
+    <ol class="small"><li>Túmbate en el banco con las mancuernas a la altura del pecho.</li><li>Junta ligeramente las escápulas y apoya bien los pies.</li><li>Empuja hacia arriba y baja controlando en 2 segundos.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Abrir mucho los codos (90°) o rebotar abajo.</div><div class="exhome"><b>⌂ Casa:</b> Flexiones (ver siguiente ejercicio).</div></div>
+  </div></div><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 15</span><div class="t">Flexiones</div><div class="d">Persona haciendo flexiones inclinadas con las manos apoyadas en un banco, cuerpo recto.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">06</div><h2>Flexiones</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Pectoral, tríceps, core</span><span><b>Material:</b> Peso corporal</span></div>
+    <ol class="small"><li>Manos algo más abiertas que los hombros, cuerpo recto de cabeza a talones.</li><li>Baja el pecho hacia el suelo con los codos a 45°.</li><li>Empuja el suelo hasta estirar los brazos.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Dejar caer la cadera o no bajar del todo.</div><div class="exhome"><b>⌂ Casa:</b> Progresión: pared → mesa → rodillas → suelo.</div></div>
+  </div></div><div class="foot"><span>MÉTODO DEFINE</span><span><b>24</b></span></div></section><section class="page exlib" data-n="25"><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 16</span><div class="t">Remo con mancuerna</div><div class="d">Persona con una rodilla y una mano en el banco tirando de una mancuerna hacia la cadera.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">07</div><h2>Remo con mancuerna</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Dorsal, espalda media, bíceps</span><span><b>Material:</b> Banco y mancuerna</span></div>
+    <ol class="small"><li>Apoya una mano y una rodilla en el banco, espalda recta.</li><li>Tira de la mancuerna hacia la cadera llevando el codo atrás.</li><li>Baja controlando hasta estirar el brazo.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Girar el tronco para subir el peso o tirar con el bíceps.</div><div class="exhome"><b>⌂ Casa:</b> Con garrafa o mochila, apoyado en una silla.</div></div>
+  </div></div><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 17</span><div class="t">Jalón al pecho</div><div class="d">Persona sentada en la máquina de jalón tirando de la barra hacia el pecho.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">08</div><h2>Jalón al pecho</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Dorsal, bíceps</span><span><b>Material:</b> Polea alta</span></div>
+    <ol class="small"><li>Agarra la barra algo más abierta que los hombros.</li><li>Saca pecho y lleva la barra hacia la parte alta del pecho.</li><li>Sube controlando hasta estirar los brazos.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Balancearse hacia atrás o bajar la barra por detrás de la nuca.</div><div class="exhome"><b>⌂ Casa:</b> Goma anclada en lo alto de una puerta, o remo invertido bajo una mesa.</div></div>
+  </div></div><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 18</span><div class="t">Press militar con mancuernas</div><div class="d">Persona sentada en un banco con respaldo empujando dos mancuernas por encima de la cabeza.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">09</div><h2>Press militar con mancuernas</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Hombros, tríceps</span><span><b>Material:</b> Mancuernas (sentado o de pie)</span></div>
+    <ol class="small"><li>Mancuernas a la altura de los hombros, palmas al frente.</li><li>Empuja hacia arriba hasta estirar los brazos.</li><li>Baja controlando hasta la altura de las orejas.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Arquear mucho la espalda baja.</div><div class="exhome"><b>⌂ Casa:</b> Con garrafas o botellas grandes, o goma bajo los pies.</div></div>
+  </div></div><div class="foot"><span>MÉTODO DEFINE</span><span><b>25</b></span></div></section><section class="page exlib" data-n="26"><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 19</span><div class="t">Plancha frontal</div><div class="d">Persona en plancha sobre los antebrazos con el cuerpo totalmente recto, vista lateral.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">10</div><h2>Plancha frontal</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Core (abdomen profundo)</span><span><b>Material:</b> Peso corporal</span></div>
+    <ol class="small"><li>Apoya antebrazos y puntas de los pies.</li><li>Aprieta glúteos y abdomen; cuerpo en línea recta.</li><li>Respira con normalidad y mantén la posición.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Dejar caer la cadera o subirla demasiado.</div><div class="exhome"><b>⌂ Casa:</b> Igual. Más fácil: con las rodillas apoyadas.</div></div>
+  </div></div><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 20</span><div class="t">Dead bug</div><div class="d">Persona boca arriba en una esterilla estirando un brazo y la pierna contraria.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">11</div><h2>Dead bug</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Core, control lumbar</span><span><b>Material:</b> Peso corporal</span></div>
+    <ol class="small"><li>Boca arriba, brazos al techo y rodillas a 90°.</li><li>Pega la zona lumbar al suelo.</li><li>Estira a la vez el brazo y la pierna contrarios sin despegar la espalda; alterna.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Despegar la zona lumbar del suelo o hacerlo rápido.</div><div class="exhome"><b>⌂ Casa:</b> Igual.</div></div>
+  </div></div><div class="ex">
+  <div class="ph" style="height:74mm;width:56mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 21</span><div class="t">Burpee sin salto</div><div class="d">Secuencia de una persona pasando de cuclillas a posición de plancha en un salón luminoso.</div><div class="f">Formato 4:5 vertical · Prompt en el Anexo A (pág. 40)</div></div>
+  <div class="exbody">
+    <div class="exnum">12</div><h2>Burpee sin salto</h2>
+    <div class="exmeta"><span><b>Músculos:</b> Cuerpo completo, cardio</span><span><b>Material:</b> Peso corporal</span></div>
+    <ol class="small"><li>Agáchate y apoya las manos en el suelo.</li><li>Lleva los pies atrás (uno a uno o juntos) hasta posición de plancha.</li><li>Vuelve a traer los pies y ponte de pie.</li></ol>
+    <div class="exfoot"><div class="exerr"><b>✕ Error:</b> Dejar caer la cadera en la plancha.</div><div class="exhome"><b>⌂ Casa:</b> Igual. Más difícil: añade el salto al final.</div></div>
+  </div></div><div class="foot"><span>MÉTODO DEFINE</span><span><b>26</b></span></div></section><section class="page " data-n="27">
+<div class="kicker">Capítulo 6</div><h1 class="chap">Tu plan de 12 semanas</h1><div class="bar"></div><p class="lead">Tres fases de 4 semanas. Cada fase sube un poco la exigencia para que tu cuerpo siga progresando mientras pierdes grasa.</p>
+
+<svg viewBox="0 0 520 150" width="100%" font-family="Inter">
+  <rect x="0" y="40" width="168" height="44" rx="6" fill="#FFB703"/>
+  <rect x="176" y="40" width="168" height="44" rx="6" fill="#FF5A36"/>
+  <rect x="352" y="40" width="168" height="44" rx="6" fill="#15192B"/>
+  <text x="84" y="60" text-anchor="middle" font-size="12" font-weight="800" fill="#15192B">FASE 1 · BASE</text>
+  <text x="84" y="76" text-anchor="middle" font-size="10.5" fill="#15192B">Semanas 1–4</text>
+  <text x="260" y="60" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">FASE 2 · CONSTRUCCIÓN</text>
+  <text x="260" y="76" text-anchor="middle" font-size="10.5" fill="#fff">Semanas 5–8</text>
+  <text x="436" y="60" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">FASE 3 · DEFINICIÓN</text>
+  <text x="436" y="76" text-anchor="middle" font-size="10.5" fill="#fff">Semanas 9–12</text>
+  <g font-size="10" fill="#15192B">
+    <text x="4" y="104">• Aprender la técnica</text><text x="4" y="119">• 3 × 10–12 · RIR 3</text><text x="4" y="134">• Solo pasos + LISS</text>
+    <text x="180" y="104">• Más series y peso</text><text x="180" y="119">• 3–4 × 8–10 · RIR 2</text><text x="180" y="134">• Entra 1 HIIT/semana</text>
+    <text x="356" y="104">• Máxima intensidad</text><text x="356" y="119">• 4 × 6–10 · RIR 1–2</text><text x="356" y="134">• Hasta 2 HIIT/semana</text>
+  </g>
+  <g fill="#6B7085" font-size="9"><circle cx="14.0" cy="20" r="9" fill="#FFB703"/><text x="14.0" y="23.5" text-anchor="middle" fill="#15192B" font-weight="700">1</text><circle cx="58.7" cy="20" r="9" fill="#FFB703"/><text x="58.7" y="23.5" text-anchor="middle" fill="#15192B" font-weight="700">2</text><circle cx="103.4" cy="20" r="9" fill="#FFB703"/><text x="103.4" y="23.5" text-anchor="middle" fill="#15192B" font-weight="700">3</text><circle cx="148.1" cy="20" r="9" fill="#FFB703"/><text x="148.1" y="23.5" text-anchor="middle" fill="#15192B" font-weight="700">4</text><circle cx="192.8" cy="20" r="9" fill="#FF5A36"/><text x="192.8" y="23.5" text-anchor="middle" fill="#fff" font-weight="700">5</text><circle cx="237.5" cy="20" r="9" fill="#FF5A36"/><text x="237.5" y="23.5" text-anchor="middle" fill="#fff" font-weight="700">6</text><circle cx="282.2" cy="20" r="9" fill="#FF5A36"/><text x="282.2" y="23.5" text-anchor="middle" fill="#fff" font-weight="700">7</text><circle cx="326.9" cy="20" r="9" fill="#FF5A36"/><text x="326.9" y="23.5" text-anchor="middle" fill="#fff" font-weight="700">8</text><circle cx="371.6" cy="20" r="9" fill="#15192B"/><text x="371.6" y="23.5" text-anchor="middle" fill="#fff" font-weight="700">9</text><circle cx="416.3" cy="20" r="9" fill="#15192B"/><text x="416.3" y="23.5" text-anchor="middle" fill="#fff" font-weight="700">10</text><circle cx="461.0" cy="20" r="9" fill="#15192B"/><text x="461.0" y="23.5" text-anchor="middle" fill="#fff" font-weight="700">11</text><circle cx="505.7" cy="20" r="9" fill="#15192B"/><text x="505.7" y="23.5" text-anchor="middle" fill="#fff" font-weight="700">12</text></g>
+</svg>
+<h2>Tu semana tipo</h2>
+<div class="week"><div class="wd a"><b>Lun</b><span>Fuerza A</span></div><div class="wd c"><b>Mar</b><span>Pasos + LISS</span></div><div class="wd a"><b>Mié</b><span>Fuerza B</span></div><div class="wd r"><b>Jue</b><span>Descanso activo</span></div><div class="wd a"><b>Vie</b><span>Fuerza A</span></div><div class="wd c"><b>Sáb</b><span>HIIT o actividad libre</span></div><div class="wd r"><b>Dom</b><span>Descanso</span></div></div>
+<p class="small muted">Alterna las sesiones: semana impar A-B-A, semana par B-A-B. El sábado haz HIIT solo a partir de la Fase 2; en la Fase 1, sustitúyelo por una caminata larga o cualquier actividad que te guste (bici, nadar, pádel…).</p>
+<div class="cols2">
+<div><div class="box tip"><span class="lbl">¿Poco tiempo?</span>Si solo puedes entrenar 2 días, haz A y B cada semana y sube tus pasos. Seguirás progresando, algo más despacio.</div></div>
+<div><div class="box key"><span class="lbl">Semana de descarga</span>Si en la semana 7 u 8 te notas muy cansado, haz una <b>semana de descarga</b>: mismos ejercicios con la mitad de series.</div></div>
+</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>27</b></span></div></section><section class="page " data-n="28">
+<div class="phasehead"><div><div class="kicker">Semanas 1–4</div><h1 class="sm">Fase 1 · Base</h1></div></div>
+<div class="bar"></div>
+<p>Objetivo: aprender la técnica y crear el hábito. Usa pesos con los que te sientas cómodo.</p>
+<h2 class="day"><span>A</span> Día A · Cuerpo completo</h2>
+<table class="routine"><colgroup><col style="width:29%"><col style="width:33%"><col style="width:16%"><col style="width:10%"><col style="width:12%"></colgroup><thead><tr><th>Ejercicio (gimnasio)</th><th>Alternativa casa</th><th>Series × reps</th><th>Desc.</th><th>RIR</th></tr></thead><tbody><tr><td>Sentadilla goblet</td><td>Sentadilla con garrafa</td><td>3 × 10–12</td><td>90 s</td><td>3</td></tr><tr><td>Press banca mancuernas</td><td>Flexiones inclinadas</td><td>3 × 10–12</td><td>90 s</td><td>3</td></tr><tr><td>Remo con mancuerna</td><td>Remo con garrafa</td><td>3 × 10–12 c/lado</td><td>60 s</td><td>3</td></tr><tr><td>Peso muerto rumano</td><td>Peso muerto con mochila</td><td>3 × 10–12</td><td>90 s</td><td>3</td></tr><tr><td>Plancha frontal</td><td>Plancha frontal</td><td>3 × 20–30 s</td><td>45 s</td><td>–</td></tr></tbody></table>
+<h2 class="day"><span>B</span> Día B · Cuerpo completo</h2>
+<table class="routine"><colgroup><col style="width:29%"><col style="width:33%"><col style="width:16%"><col style="width:10%"><col style="width:12%"></colgroup><thead><tr><th>Ejercicio (gimnasio)</th><th>Alternativa casa</th><th>Series × reps</th><th>Desc.</th><th>RIR</th></tr></thead><tbody><tr><td>Hip thrust</td><td>Hip thrust en sofá</td><td>3 × 10–12</td><td>90 s</td><td>3</td></tr><tr><td>Jalón al pecho</td><td>Remo con goma</td><td>3 × 10–12</td><td>90 s</td><td>3</td></tr><tr><td>Zancada atrás</td><td>Zancada atrás</td><td>2 × 10 c/lado</td><td>60 s</td><td>3</td></tr><tr><td>Press militar mancuernas</td><td>Press con garrafas</td><td>3 × 10–12</td><td>60 s</td><td>3</td></tr><tr><td>Dead bug</td><td>Dead bug</td><td>3 × 8 c/lado</td><td>45 s</td><td>–</td></tr></tbody></table>
+<div class="cols2"><div><div class="box key"><span class="lbl">Cardio de esta fase</span>Cardio: 2 sesiones de LISS de 30 min + objetivo de pasos.</div></div><div class="box tip"><span class="lbl">Claves de esta fase</span><ul class="small"><li>Elige pesos con los que podrías hacer 3 repeticiones más.</li><li>Graba alguna serie con el móvil para revisar tu técnica.</li><li>Apunta cada sesión en el registro desde el primer día.</li><li>Si algún ejercicio te molesta, usa la alternativa de casa o pregunta a un profesional.</li></ul></div></div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>28</b></span></div></section><section class="page " data-n="29">
+<div class="phasehead"><div><div class="kicker">Semanas 5–8</div><h1 class="sm">Fase 2 · Construcción</h1></div></div>
+<div class="bar"></div>
+<p>Objetivo: más trabajo total. Sube el peso respecto a la Fase 1 y aplica la doble progresión.</p>
+<h2 class="day"><span>A</span> Día A · Cuerpo completo</h2>
+<table class="routine"><colgroup><col style="width:29%"><col style="width:33%"><col style="width:16%"><col style="width:10%"><col style="width:12%"></colgroup><thead><tr><th>Ejercicio (gimnasio)</th><th>Alternativa casa</th><th>Series × reps</th><th>Desc.</th><th>RIR</th></tr></thead><tbody><tr><td>Sentadilla goblet</td><td>Sentadilla con mochila pesada</td><td>4 × 8–10</td><td>90 s</td><td>2</td></tr><tr><td>Press banca mancuernas</td><td>Flexiones (rodillas o suelo)</td><td>4 × 8–10</td><td>90 s</td><td>2</td></tr><tr><td>Remo con mancuerna</td><td>Remo con garrafa</td><td>3 × 8–10 c/lado</td><td>60 s</td><td>2</td></tr><tr><td>Peso muerto rumano</td><td>Peso muerto a una pierna</td><td>3 × 8–10</td><td>90 s</td><td>2</td></tr><tr><td>Plancha frontal</td><td>Plancha frontal</td><td>3 × 30–40 s</td><td>45 s</td><td>–</td></tr></tbody></table>
+<h2 class="day"><span>B</span> Día B · Cuerpo completo</h2>
+<table class="routine"><colgroup><col style="width:29%"><col style="width:33%"><col style="width:16%"><col style="width:10%"><col style="width:12%"></colgroup><thead><tr><th>Ejercicio (gimnasio)</th><th>Alternativa casa</th><th>Series × reps</th><th>Desc.</th><th>RIR</th></tr></thead><tbody><tr><td>Hip thrust</td><td>Hip thrust a una pierna</td><td>4 × 8–10</td><td>90 s</td><td>2</td></tr><tr><td>Jalón al pecho</td><td>Remo invertido bajo mesa</td><td>4 × 8–10</td><td>90 s</td><td>2</td></tr><tr><td>Zancada atrás</td><td>Zancada atrás con mochila</td><td>3 × 10 c/lado</td><td>60 s</td><td>2</td></tr><tr><td>Press militar mancuernas</td><td>Pike push-up o garrafas</td><td>3 × 8–10</td><td>60 s</td><td>2</td></tr><tr><td>Dead bug</td><td>Dead bug</td><td>3 × 10 c/lado</td><td>45 s</td><td>–</td></tr></tbody></table>
+<div class="cols2"><div><div class="box key"><span class="lbl">Cardio de esta fase</span>Cardio: 1 HIIT + 1 LISS por semana + objetivo de pasos.</div></div><div class="box tip"><span class="lbl">Claves de esta fase</span><ul class="small"><li>Sube el peso en cuanto completes el rango en todas las series.</li><li>Haz el HIIT después de la fuerza o en otro día, nunca antes.</li><li>Revisa tu media semanal: si no baja en 3 semanas, consulta la sección de estancamientos.</li><li>Mantén la proteína alta: el volumen de entreno sube.</li></ul></div></div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>29</b></span></div></section><section class="page " data-n="30">
+<div class="phasehead"><div><div class="kicker">Semanas 9–12</div><h1 class="sm">Fase 3 · Definición</h1></div></div>
+<div class="bar"></div>
+<p>Objetivo: mantener la fuerza al máximo mientras el déficit avanza. Menos repeticiones, más intensidad.</p>
+<h2 class="day"><span>A</span> Día A · Cuerpo completo</h2>
+<table class="routine"><colgroup><col style="width:29%"><col style="width:33%"><col style="width:16%"><col style="width:10%"><col style="width:12%"></colgroup><thead><tr><th>Ejercicio (gimnasio)</th><th>Alternativa casa</th><th>Series × reps</th><th>Desc.</th><th>RIR</th></tr></thead><tbody><tr><td>Sentadilla goblet</td><td>Sentadilla con mochila + pausa 2 s</td><td>4 × 6–10</td><td>2 min</td><td>1–2</td></tr><tr><td>Press banca mancuernas</td><td>Flexiones con pausa abajo</td><td>4 × 6–10</td><td>2 min</td><td>1–2</td></tr><tr><td>Remo con mancuerna</td><td>Remo con garrafa</td><td>4 × 8–10 c/lado</td><td>75 s</td><td>1–2</td></tr><tr><td>Peso muerto rumano</td><td>Peso muerto a una pierna</td><td>3 × 8</td><td>90 s</td><td>1–2</td></tr><tr><td>Finisher: burpee sin salto</td><td>Burpee (con o sin salto)</td><td>4 × 30 s / 30 s</td><td>–</td><td>–</td></tr></tbody></table>
+<h2 class="day"><span>B</span> Día B · Cuerpo completo</h2>
+<table class="routine"><colgroup><col style="width:29%"><col style="width:33%"><col style="width:16%"><col style="width:10%"><col style="width:12%"></colgroup><thead><tr><th>Ejercicio (gimnasio)</th><th>Alternativa casa</th><th>Series × reps</th><th>Desc.</th><th>RIR</th></tr></thead><tbody><tr><td>Hip thrust</td><td>Hip thrust a una pierna + pausa</td><td>4 × 6–10</td><td>2 min</td><td>1–2</td></tr><tr><td>Jalón al pecho</td><td>Remo invertido bajo mesa</td><td>4 × 8–10</td><td>90 s</td><td>1–2</td></tr><tr><td>Zancada atrás</td><td>Zancada búlgara en silla</td><td>3 × 10 c/lado</td><td>75 s</td><td>1–2</td></tr><tr><td>Press militar mancuernas</td><td>Pike push-up</td><td>3 × 8–10</td><td>75 s</td><td>1–2</td></tr><tr><td>SS: Dead bug + plancha</td><td>SS: Dead bug + plancha</td><td>3 rondas</td><td>60 s</td><td>–</td></tr></tbody></table>
+<div class="cols2"><div><div class="box key"><span class="lbl">Cardio de esta fase</span>Cardio: 2 HIIT, o 1 HIIT + 2 LISS + objetivo de pasos (9.000–10.000).</div></div><div class="box tip"><span class="lbl">Claves de esta fase</span><ul class="small"><li>En déficit es normal que los pesos se estanquen: mantenerlos ya es un éxito.</li><li>Prioriza el sueño; la fatiga se acumula al final del plan.</li><li>Usa descansos más largos en los ejercicios principales.</li><li>Semana 12: fotos y medidas finales para comparar con el inicio.</li></ul></div></div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>30</b></span></div></section><section class="page " data-n="31">
+<div class="kicker">Cardio</div>
+<h1>Protocolos de cardio</h1>
+<div class="bar"></div>
+<div class="cols2">
+<div class="proto">
+<h2>HIIT A · Máquina</h2>
+<p class="small muted">Bici estática, elíptica o remo · 23 minutos</p>
+<table class=""><thead><tr><th>Bloque</th><th>Tiempo</th></tr></thead><tbody><tr><td>Calentamiento suave</td><td>5 min</td></tr><tr><td><b>Rápido</b> (esfuerzo 8–9/10)</td><td>30 s</td></tr><tr><td>Suave (esfuerzo 3/10)</td><td>90 s</td></tr><tr><td>Repite rápido + suave</td><td>8 rondas</td></tr><tr><td>Vuelta a la calma</td><td>2 min</td></tr></tbody></table>
+</div>
+<div class="proto">
+<h2>HIIT B · En casa</h2>
+<p class="small muted">Sin material · 4 rondas · ≈ 20 minutos</p>
+<table class=""><thead><tr><th>Ejercicio</th><th>Trabajo / descanso</th></tr></thead><tbody><tr><td>Sentadilla</td><td>40 s / 20 s</td></tr><tr><td>Mountain climbers</td><td>40 s / 20 s</td></tr><tr><td>Burpee sin salto</td><td>40 s / 20 s</td></tr><tr><td>Zancada alterna</td><td>40 s / 20 s</td></tr><tr><td>Plancha</td><td>40 s / 20 s</td></tr></tbody></table>
+<p class="small">1 minuto de descanso entre rondas.</p>
+</div>
+</div>
+<h2>LISS · Caminata o bici suave</h2>
+<p>30–45 minutos a ritmo constante. En cinta, prueba la caminata inclinada: 5–8 % de inclinación a 5–5,5 km/h.
+Deberías poder mantener una conversación, aunque con algo de esfuerzo.</p>
+<h2>Escala de esfuerzo percibido</h2>
+<table class=""><colgroup><col style="width:14%"><col style="width:50%"><col style="width:36%"></colgroup><thead><tr><th>Nivel</th><th>Sensación</th><th>Uso</th></tr></thead><tbody><tr><td>1–2</td><td>Muy suave, como pasear</td><td>Descanso activo</td></tr><tr><td>3–4</td><td>Cómodo, puedes hablar sin problema</td><td>Calentamiento, recuperación en HIIT</td></tr><tr><td>5–6</td><td>Algo exigente, hablas con frases cortas</td><td>LISS</td></tr><tr><td>7–8</td><td>Duro, solo puedes decir palabras sueltas</td><td>Final de intervalos</td></tr><tr><td>9–10</td><td>Máximo, no puedes hablar</td><td>Intervalos rápidos del HIIT</td></tr></tbody></table>
+<div class="box warn"><span class="lbl">Error típico</span>Hacer HIIT todos los días. Genera mucha fatiga, empeora tus entrenamientos de fuerza y aumenta el riesgo de lesión. Dos sesiones por semana son suficientes.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>31</b></span></div></section><section class="page " data-n="32">
+<div class="kicker">Capítulo 7</div><h1 class="chap">Hábitos que marcan la diferencia</h1><div class="bar"></div><p class="lead">Lo que haces fuera del gimnasio y de la cocina también cuenta. Y mucho.</p>
+<div class="ph" style="height:64mm;width:100%"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 22</span><div class="t">Rutina de descanso nocturno</div><div class="d">Dormitorio acogedor con luz cálida tenue, persona leyendo un libro en la cama antes de dormir, móvil apartado en la mesilla.</div><div class="f">Formato horizontal 16:9 · Prompt en el Anexo A (pág. 40)</div></div>
+<div class="cols2">
+<div>
+<h3>😴 Sueño: 7–9 horas</h3>
+<p class="small">Dormir poco aumenta las hormonas del hambre, te da antojos de comida calórica y te quita energía para entrenar.
+Intenta acostarte y levantarte a la misma hora, y aparta las pantallas 30 minutos antes de dormir.</p>
+<h3>💧 Agua</h3>
+<p class="small">Como referencia, unos 30–35 ml por kg de peso al día (más si sudas mucho). Lleva siempre una botella contigo.</p>
+</div>
+<div>
+<h3>🧘 Estrés</h3>
+<p class="small">El estrés crónico dispara el picoteo emocional. Caminar, respirar profundo 5 minutos o hablar con alguien ayudan más que cualquier suplemento.</p>
+<h3>📅 Constancia, no perfección</h3>
+<p class="small">Si cumples el plan el 80–90 % del tiempo, vas a progresar. Un mal día no arruina nada; abandonar sí.
+Si fallas, vuelve al plan en la siguiente comida, no el lunes.</p>
+</div>
+</div>
+<div class="box tip"><span class="lbl">Consejo</span>Encadena hábitos: «después de desayunar, salgo a caminar 10 minutos». Pegar un hábito nuevo a uno que ya tienes multiplica las probabilidades de cumplirlo.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>32</b></span></div></section><section class="page " data-n="33">
+<div class="kicker">Solución de problemas</div>
+<h1>¿Te has estancado?</h1>
+<div class="bar"></div>
+<p>Es normal que el progreso se frene en algún momento. Antes de cambiar nada, comprueba que realmente es un estancamiento:
+<b>tu media semanal de peso y tu cintura no han bajado en 2–3 semanas seguidas</b>.</p>
+<h2>Sigue este orden</h2>
+<div class="steps">
+  <div class="step"><b>1</b><div><h3>Revisa con honestidad</h3><p>Aceite «a ojo», picoteos, bebidas, salsas y fines de semana. Apunta todo durante 7 días.</p></div></div>
+  <div class="step"><b>2</b><div><h3>Sube los pasos</h3><p>Añade 1.500–2.000 pasos diarios a tu media actual.</p></div></div>
+  <div class="step"><b>3</b><div><h3>Ajusta las calorías</h3><p>Resta 100–150 kcal al día, preferiblemente de hidratos o grasas. Nunca de la proteína.</p></div></div>
+  <div class="step"><b>4</b><div><h3>Revisa sueño y estrés</h3><p>Dormir mal y el estrés pueden retener líquidos y ocultar la pérdida de grasa varias semanas.</p></div></div>
+  <div class="step"><b>5</b><div><h3>Haz un descanso de dieta</h3><p>Si llevas más de 10–12 semanas en déficit, come 1–2 semanas a mantenimiento y luego retoma.</p></div></div>
+</div>
+<h2>Los 6 errores más comunes</h2>
+<div class="errgrid">
+  <div><b>Déficit extremo</b>Más hambre, menos músculo y efecto rebote.</div>
+  <div><b>Solo cardio</b>Pierdes músculo y el cuerpo no se define.</div>
+  <div><b>Poca proteína</b>Más hambre y peor recuperación.</div>
+  <div><b>Compensar el lunes</b>Castigarse con ayunos tras un exceso alimenta el ciclo de atracones.</div>
+  <div><b>Vivir pegado a la báscula</b>Mira la media semanal, no el dato de un día.</div>
+  <div><b>Cambiar de plan cada semana</b>Dale al método al menos 4 semanas antes de juzgarlo.</div>
+</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>33</b></span></div></section><section class="page " data-n="34">
+<div class="kicker">Seguimiento</div>
+<h1>Cómo medir tu progreso</h1>
+<div class="bar"></div>
+<p>La báscula es solo una de las formas de medir. Combinando varias tendrás la foto completa, sobre todo cuando pierdes grasa y ganas algo de músculo a la vez.</p>
+<div class="measure">
+<div class="ph" style="height:98mm;width:72mm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg><span class="num">IMAGEN 23</span><div class="t">Dónde medir el cuerpo</div><div class="d">Ilustración limpia de una silueta humana de frente con líneas marcando dónde medir: cintura (a la altura del ombligo), cadera (parte más ancha), muslo y brazo.</div><div class="f">Formato vertical 3:4 · Prompt en el Anexo A (pág. 40)</div></div>
+<div>
+<h3>⚖️ Báscula</h3>
+<p class="small">Pésate 3–7 días por semana, en ayunas y después de ir al baño. Apunta la <b>media semanal</b>.</p>
+<h3>📏 Cinta métrica</h3>
+<p class="small">Cada 2 semanas, por la mañana: cintura (a la altura del ombligo), cadera (parte más ancha), muslo y brazo. La cintura es el mejor indicador de pérdida de grasa.</p>
+<h3>📸 Fotos</h3>
+<p class="small">Cada 2–4 semanas: frente, perfil y espalda. Misma luz, misma ropa y misma hora. Las fotos muestran cambios que la báscula no ve.</p>
+<h3>💪 Rendimiento</h3>
+<p class="small">Si mantienes o subes tus pesos mientras bajas de peso, estás conservando el músculo. ¡Buena señal!</p>
+</div>
+</div>
+<div class="box key"><span class="lbl">Dato clave</span>Tu peso puede estancarse una semana mientras tu cintura baja. Eso es pérdida de grasa con retención de líquidos o ganancia de músculo. Por eso usamos varias medidas.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>34</b></span></div></section><section class="page " data-n="35">
+<div class="kicker">Plantilla imprimible</div>
+<h1 class="sm">Registro de entrenamiento</h1>
+<div class="bar"></div>
+<p class="small">Imprime tantas copias como necesites. Apuntar cada serie es la forma más fácil de aplicar la doble progresión.</p>
+<div class="tplhead"><b>SESIÓN 1 · Día A / B</b><span>Semana ____ · Fase ____ · Fecha ___ / ___ / ___</span></div><table class="tpl"><colgroup><col style="width:24%"><col style="width:13%"><col style="width:13%"><col style="width:13%"><col style="width:13%"><col style="width:8%"><col style="width:16%"></colgroup><thead><tr><th>Ejercicio</th><th>Serie 1<br><small>kg × reps</small></th><th>Serie 2</th><th>Serie 3</th><th>Serie 4</th><th>RIR</th><th>Notas</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><div class="tplfoot"><span>Energía (1–5): ____</span><span>Duración: ______ min</span><span>Cardio / pasos: __________</span></div>
+<div class="tplhead"><b>SESIÓN 2 · Día A / B</b><span>Semana ____ · Fase ____ · Fecha ___ / ___ / ___</span></div><table class="tpl"><colgroup><col style="width:24%"><col style="width:13%"><col style="width:13%"><col style="width:13%"><col style="width:13%"><col style="width:8%"><col style="width:16%"></colgroup><thead><tr><th>Ejercicio</th><th>Serie 1<br><small>kg × reps</small></th><th>Serie 2</th><th>Serie 3</th><th>Serie 4</th><th>RIR</th><th>Notas</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><div class="tplfoot"><span>Energía (1–5): ____</span><span>Duración: ______ min</span><span>Cardio / pasos: __________</span></div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>35</b></span></div></section><section class="page " data-n="36">
+<div class="kicker">Plantilla imprimible</div>
+<h1 class="sm">Registro de pasos y cardio</h1>
+<div class="bar"></div>
+<p class="small">Anota tus pasos de cada día (en miles, por ejemplo 8,4) y marca con una letra el cardio: <b>L</b> = LISS, <b>H</b> = HIIT.</p>
+<table class="tpl grid"><colgroup><col style="width:9%"><col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:14%"></colgroup><thead><tr><th>Sem.</th><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th><th>Media</th></tr></thead><tbody><tr><td><b>1</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>2</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>3</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>4</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>5</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>6</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>7</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>8</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>9</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>10</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>11</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>12</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+<div class="box tip"><span class="lbl">Consejo</span>Divide el total de la semana entre 7 para sacar la media. Si una semana baja mucho, revisa qué ha pasado (tiempo, trabajo, cansancio) y planifica cómo compensarlo.</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>36</b></span></div></section><section class="page " data-n="37">
+<div class="kicker">Plantilla imprimible</div>
+<h1 class="sm">Revisión semanal</h1>
+<div class="bar"></div>
+<p class="small">Rellénala cada semana el mismo día. Las medidas, cada 2 semanas.</p>
+<table class="tpl grid"><colgroup><col style="width:10%"><col style="width:13%"><col style="width:14%"><col style="width:12%"><col style="width:12%"><col style="width:12%"><col style="width:13%"><col style="width:14%"></colgroup><thead><tr><th>Sem.</th><th>Fecha</th><th>Peso medio</th><th>Cintura</th><th>Cadera</th><th>Muslo</th><th>Pasos/día</th><th>Energía 1–5</th></tr></thead><tbody><tr><td><b>Inicio</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S1</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S2</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S3</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S4</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S5</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S6</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S7</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S8</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S9</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S10</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S11</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><b>S12</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+<div class="notes"><b>Notas y ajustes de este bloque:</b></div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>37</b></span></div></section><section class="page " data-n="38">
+<div class="kicker">Plantilla imprimible</div>
+<h1 class="sm">Hábitos semanales</h1>
+<div class="bar"></div>
+<p class="small">Marca cada hábito que cumplas. El objetivo no es tenerlo todo perfecto, sino ver más casillas marcadas cada semana.</p>
+<h3>Semana ____</h3><table class="tpl habits"><colgroup><col style="width:37%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"></colgroup><thead><tr><th>Hábito</th><th>L</th><th>M</th><th>X</th><th>J</th><th>V</th><th>S</th><th>D</th></tr></thead><tbody><tr><td>Llegué a mi proteína</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Objetivo de pasos</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>2 litros de agua</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Dormí 7 h o más</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Entreno / cardio hecho</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>5 raciones fruta/verdura</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Sin alcohol</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Dentro de mis calorías</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr></tbody></table>
+<h3>Semana ____</h3><table class="tpl habits"><colgroup><col style="width:37%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"></colgroup><thead><tr><th>Hábito</th><th>L</th><th>M</th><th>X</th><th>J</th><th>V</th><th>S</th><th>D</th></tr></thead><tbody><tr><td>Llegué a mi proteína</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Objetivo de pasos</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>2 litros de agua</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Dormí 7 h o más</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Entreno / cardio hecho</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>5 raciones fruta/verdura</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Sin alcohol</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr><tr><td>Dentro de mis calorías</td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td><td><span class="cb"></span></td></tr></tbody></table>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>38</b></span></div></section><section class="page " data-n="39">
+<div class="kicker">Plantilla imprimible</div>
+<h1 class="sm">Planificador de comidas</h1>
+<div class="bar"></div>
+<p class="small">Planifica la semana el domingo y haz la lista de la compra a partir de aquí.</p>
+<table class="tpl meals"><colgroup><col style="width:14%"><col style="width:21.5%"><col style="width:21.5%"><col style="width:21.5%"><col style="width:21.5%"></colgroup><thead><tr><th>Día</th><th>Desayuno</th><th>Comida</th><th>Merienda</th><th>Cena</th></tr></thead><tbody><tr><td><b>Lunes</b></td><td></td><td></td><td></td><td></td></tr><tr><td><b>Martes</b></td><td></td><td></td><td></td><td></td></tr><tr><td><b>Miércoles</b></td><td></td><td></td><td></td><td></td></tr><tr><td><b>Jueves</b></td><td></td><td></td><td></td><td></td></tr><tr><td><b>Viernes</b></td><td></td><td></td><td></td><td></td></tr><tr><td><b>Sábado</b></td><td></td><td></td><td></td><td></td></tr><tr><td><b>Domingo</b></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+<div class="cols2">
+<div class="notes tall"><b>Lista de la compra:</b></div>
+<div class="notes tall"><b>Batch cooking del domingo:</b></div>
+</div>
+<div class="foot"><span>MÉTODO DEFINE</span><span><b>39</b></span></div></section><section class="page " data-n="40"><div class="kicker">Anexo A</div><h1 class="sm">Lista de imágenes y prompts</h1><div class="bar"></div>
+<p class="small">Todas las imágenes del ebook con su descripción y un prompt en inglés listo para pegar en Higgsfield, APIMart u otro
+generador. Todos terminan con el mismo bloque de estilo para que el libro tenga una estética uniforme.
+<b>Bloque de estilo común:</b> <i>photorealistic editorial fitness photography, bright natural daylight, clean modern setting, warm neutral tones with subtle coral-orange accents, shallow depth of field, high detail, no text, no logos</i>.</p><div class="ai"><div class="ain">01</div><div><b>Imagen de portada</b> <span class="aif">· vertical 3:4</span>
+<div class="aid">Persona en forma, sonriente y segura, de pie en un gimnasio luminoso con una mancuerna en la mano. Ropa deportiva negra con detalles naranjas. Encuadre de cintura para arriba, fondo oscuro desenfocado.</div><div class="aip">Fit confident person in their 30s smiling, standing in a modern gym holding a dumbbell, black athletic wear with coral-orange details, waist-up framing, dark blurred gym background with warm rim light, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">02</div><div><b>Persona caminando al aire libre</b> <span class="aif">· horizontal 16:9</span>
+<div class="aid">Persona caminando a paso ligero por un parque al amanecer, auriculares puestos, ropa deportiva cómoda, expresión tranquila y decidida.</div><div class="aip">Person power-walking in a city park at sunrise, wearing earphones and comfortable athletic clothes, calm determined expression, golden morning light, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">03</div><div><b>Overnight oats con frutos rojos</b> <span class="aif">· vertical 4:5</span>
+<div class="aid">Tarro de cristal con overnight oats en capas: avena cremosa, yogur blanco y frutos rojos encima, sobre una mesa de madera clara con luz de mañana.</div><div class="aip">Glass jar of layered overnight oats with creamy yogurt and fresh mixed berries on top, chia seeds, light wooden table, soft morning window light, overhead three-quarter angle, food photography, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">04</div><div><b>Tortilla de claras con espinacas</b> <span class="aif">· vertical 4:5</span>
+<div class="aid">Tortilla francesa jugosa doblada, rellena de espinacas y queso fresco, en un plato blanco con una tostada integral al lado.</div><div class="aip">Fluffy folded egg white omelette filled with spinach and fresh white cheese on a white plate, slice of toasted whole grain bread on the side, kitchen counter, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">05</div><div><b>Bowl de pollo, arroz y verduras</b> <span class="aif">· vertical 4:5</span>
+<div class="aid">Bowl visto desde arriba con arroz blanco, tiras de pollo dorado con pimentón y verduras salteadas de colores.</div><div class="aip">Overhead shot of a healthy bowl with white rice, golden paprika chicken strips and colorful sautéed vegetables (bell pepper, zucchini, broccoli), lemon wedge, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">06</div><div><b>Salmón al horno con patata y brócoli</b> <span class="aif">· vertical 4:5</span>
+<div class="aid">Lomo de salmón al horno dorado con rodajas de patata y ramilletes de brócoli en una bandeja de horno, con rodajas de limón.</div><div class="aip">Oven-baked salmon fillet with herbs, golden sliced potatoes and broccoli florets on a baking tray, lemon slices, rustic kitchen, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">07</div><div><b>Ensalada de garbanzos y atún</b> <span class="aif">· vertical 4:5</span>
+<div class="aid">Ensalada fresca de garbanzos con atún, tomate, pepino y cebolla morada en un bol de cerámica, vista cenital.</div><div class="aip">Fresh chickpea and tuna salad with tomato, cucumber and red onion in a ceramic bowl, olive oil drizzle, oregano, overhead view, Mediterranean style, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">08</div><div><b>Wok de ternera y verduras</b> <span class="aif">· vertical 4:5</span>
+<div class="aid">Wok humeante con tiras de ternera, fideos de arroz y verduras crujientes de colores, palillos al lado.</div><div class="aip">Steaming wok with beef strips, rice noodles and crunchy colorful stir-fry vegetables, soy sauce, chopsticks beside, dark kitchen background with warm light, <i>[estilo común]</i></div></div></div><div class="foot"><span>MÉTODO DEFINE</span><span><b>40</b></span></div></section><section class="page " data-n="41"><div class="ai"><div class="ain">09</div><div><b>Entrenamiento de fuerza en gimnasio</b> <span class="aif">· horizontal 16:9</span>
+<div class="aid">Mujer haciendo remo con mancuerna en un banco, concentrada, gimnasio moderno y luminoso, buena técnica, espalda recta.</div><div class="aip">Woman performing a single-arm dumbbell row on a bench with perfect form, focused expression, bright modern gym with large windows, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">10</div><div><b>Sentadilla goblet</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona en la posición baja de la sentadilla goblet sujetando una mancuerna pegada al pecho, vista lateral.</div><div class="aip">Side view of a person at the bottom of a goblet squat holding a dumbbell against the chest, upright torso, knees tracking over toes, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">11</div><div><b>Peso muerto rumano</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona inclinada con la cadera hacia atrás y espalda recta, mancuernas a la altura de las rodillas, vista lateral.</div><div class="aip">Side view of a person performing a dumbbell Romanian deadlift, hips pushed back, flat back, dumbbells at knee height, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">12</div><div><b>Hip thrust</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona haciendo hip thrust con la espalda apoyada en un banco y una barra sobre la cadera, en la posición alta.</div><div class="aip">Person performing a barbell hip thrust with upper back on a bench, hips fully extended at the top position, side view, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">13</div><div><b>Zancada atrás</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona en posición baja de zancada hacia atrás con mancuernas a los lados, vista lateral.</div><div class="aip">Side view of a person in the bottom position of a reverse lunge holding dumbbells at the sides, upright torso, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">14</div><div><b>Press de banca con mancuernas</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona tumbada en un banco empujando dos mancuernas hacia arriba, codos a unos 45°.</div><div class="aip">Person lying on a flat bench pressing two dumbbells upward, elbows at about 45 degrees, three-quarter view, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">15</div><div><b>Flexiones</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona haciendo flexiones inclinadas con las manos apoyadas en un banco, cuerpo recto.</div><div class="aip">Person doing incline push-ups with hands on a bench, straight body line from head to heels, side view, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">16</div><div><b>Remo con mancuerna</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona con una rodilla y una mano en el banco tirando de una mancuerna hacia la cadera.</div><div class="aip">Person performing a one-arm dumbbell row with one knee and hand on a bench, elbow pulled back to the hip, flat back, side view, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">17</div><div><b>Jalón al pecho</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona sentada en la máquina de jalón tirando de la barra hacia el pecho.</div><div class="aip">Person seated at a lat pulldown machine pulling the bar to the upper chest, chest up, slight lean back, front three-quarter view, <i>[estilo común]</i></div></div></div><div class="foot"><span>MÉTODO DEFINE</span><span><b>41</b></span></div></section><section class="page " data-n="42"><div class="ai"><div class="ain">18</div><div><b>Press militar con mancuernas</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona sentada en un banco con respaldo empujando dos mancuernas por encima de la cabeza.</div><div class="aip">Person seated on an upright bench pressing two dumbbells overhead, neutral spine, front view, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">19</div><div><b>Plancha frontal</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona en plancha sobre los antebrazos con el cuerpo totalmente recto, vista lateral.</div><div class="aip">Side view of a person holding a forearm plank on a mat, perfectly straight body line, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">20</div><div><b>Dead bug</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Persona boca arriba en una esterilla estirando un brazo y la pierna contraria.</div><div class="aip">Person lying on their back on a mat doing a dead bug exercise, extending opposite arm and leg, lower back flat, overhead view, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">21</div><div><b>Burpee sin salto</b> <span class="aif">· 4:5 vertical</span>
+<div class="aid">Secuencia de una persona pasando de cuclillas a posición de plancha en un salón luminoso.</div><div class="aip">Person doing a no-jump burpee in a bright living room, moving from squat to plank position, motion sequence feel, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">22</div><div><b>Rutina de descanso nocturno</b> <span class="aif">· horizontal 16:9</span>
+<div class="aid">Dormitorio acogedor con luz cálida tenue, persona leyendo un libro en la cama antes de dormir, móvil apartado en la mesilla.</div><div class="aip">Cozy bedroom with dim warm light, person reading a paper book in bed before sleep, phone face-down on the nightstand, calm atmosphere, <i>[estilo común]</i></div></div></div><div class="ai"><div class="ain">23</div><div><b>Dónde medir el cuerpo</b> <span class="aif">· vertical 3:4</span>
+<div class="aid">Ilustración limpia de una silueta humana de frente con líneas marcando dónde medir: cintura (a la altura del ombligo), cadera (parte más ancha), muslo y brazo.</div><div class="aip">Clean minimal flat vector illustration of a human body silhouette front view with measurement lines at the waist (navel level), hips (widest point), mid-thigh and upper arm, coral-orange measuring tape lines, white background, infographic style, no text</div></div></div><div class="foot"><span>MÉTODO DEFINE</span><span><b>42</b></span></div></section><section class="page endpage" data-n="43">
+<div class="end">
+  <div class="kicker">Y ahora…</div>
+  <h1>Empieza hoy,<br>no el lunes.</h1>
+  <div class="bar"></div>
+  <p class="lead">Tienes el método, las rutinas, el plan de comidas y las plantillas. Lo único que falta es dar el primer paso.</p>
+  <ol class=""><li>Calcula tus números (página 8).</li><li>Imprime las plantillas.</li><li>Haz tu primera sesión de Fuerza A esta semana.</li><li>Revisa tu progreso cada domingo.</li></ol>
+  <div class="share">
+    <h3>Comparte tu progreso</h3>
+    <p>Etiquétanos en tus redes con <b>#MetodoDEFINE</b> y cuéntanos cómo te va.</p>
+    <p class="small">Instagram: @[tu_usuario] · TikTok: @[tu_usuario] · Web: [tu web]</p>
+  </div>
+  <p class="small muted">Gracias por confiar en este método. — [Tu nombre o marca]</p>
+</div>
+</section></body></html>
