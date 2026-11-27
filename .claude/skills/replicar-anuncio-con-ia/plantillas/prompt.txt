@@ -1,0 +1,21 @@
+A partir de este vídeo, cambia las siguientes cosas:
+
+Clip 1, <lo que se ve en el clip 1, incluido DÓNDE ESTÁN LAS DOS MANOS>: cambia a la persona por la mujer de la imagen de referencia (image1), que es <descripción>. Mantén exactamente los mismos movimientos.
+Clip 2, <lo que se ve>: la misma mujer, mismos movimientos.
+…
+
+La persona es exactamente la misma en todos los clips: <descripción fija: país, edad, piel, pelo, ropa, uñas>. Usa esta misma frase, palabra por palabra, en TODOS los trozos.
+
+<SOLO SI EL ANUNCIO ENSEÑA UN ANTES Y UN DESPUÉS — repetir en todos los trozos:>
+Muy importante: la cara es asimétrica a propósito y esa diferencia es el motivo del anuncio. <describe qué lado está tratado y cuál no, diciendo "derecha del encuadre" o "izquierda del encuadre", nunca "su derecha">. Mantén esa diferencia igual en todos los fotogramas. No le iguales los dos lados.
+
+<SOLO SI HAY ALGO QUIETO EN EL PLANO — esto es lo que más se olvida:>
+Muy importante, las DOS manos: una mano sujeta <el producto> y se mueve. La otra mano se queda <dónde> y NO SE MUEVE NI SE RETIRA EN NINGÚN MOMENTO del clip. Está presente en todos los fotogramas, desde el primero hasta el último. No la borres, no la bajes y no la saques del encuadre.
+
+Mantén el producto intacto: es <qué es, forma, color, tamaño, texto que lleva impreso>. <Estado CLIP A CLIP: "en el clip 1 todavía tiene el papel blanco; en los clips 3 y 4 ya es transparente">. <Si no aparece en este trozo: "En este clip no aparece ningún producto en pantalla. No añadas ningún objeto.">
+
+Quita el texto del vídeo, tanto si sale arriba como abajo, y también los emojis.
+
+Mantén los mismos <N> clips en el mismo orden y con la misma duración que el original, incluido el último: <lo que se ve en el último clip>.
+
+Mantén el resto del vídeo igual: el mismo fondo, la misma luz, el mismo encuadre, los mismos movimientos de la mano y de la cabeza y la misma duración. Cambia solo lo que te he pedido y sé cuidadoso con los detalles.

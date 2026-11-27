@@ -1,0 +1,92 @@
+REPLICAR UN ANUNCIO GANADOR CON IA
+Se instala solo. Tu haces dos cosas.
+
+
+QUE HACE FALTA
+--------------
+- Claude Pro como minimo. Con el plan gratuito no te sale la parte de Code.
+  Claude Code va incluido en el plan, no se paga aparte. Lo tienes dentro de la
+  app de escritorio de Claude, en Mac y en Windows. No hace falta terminal.
+- Una cuenta en apimart.ai con saldo. Es el unico gasto de verdad: se paga por
+  segundo de video generado. Un anuncio de 15 segundos sale por 1 dolar.
+
+NO hace falta ElevenLabs. La voz del anuncio original se queda tal cual.
+NO hace falta TrendTrack. Ayuda a encontrar anuncios, pero vale un .mp4.
+NO hace falta saber programar.
+
+
+PASO 1 · DEJAR QUE LO INSTALE EL
+--------------------------------
+1. Abre la app de Claude en el ordenador y entra en la pestana "Code".
+2. Crea una carpeta nueva en el Escritorio (por ejemplo "replicar anuncios")
+   y abrela desde ahi.
+3. Arrastra este ZIP dentro de esa carpeta.
+4. Escribe:   instala esta skill
+
+Ya esta. El solo descomprime, deja la skill en su sitio, instala ffmpeg y
+Pillow y te prepara el archivo de la clave.
+
+Si lo prefieres a mano, es esto:
+   python3 scripts/instalar.py
+
+
+PASO 2 · TU CLAVE DE APIMART
+----------------------------
+Esto no lo puede hacer el por ti.
+
+1. Entra en apimart.ai, crea la cuenta y mete saldo.
+2. Copia tu clave.
+3. Abre el archivo  .apimart.env  que te ha dejado en tu carpeta de usuario
+   (Mac: ~/.apimart.env  ·  Windows: %USERPROFILE%\.apimart.env)
+   Si no sabes llegar, escribe:  abreme el archivo de mi clave de apimart
+4. Pega tu clave detras del igual y guarda:
+
+      APIMART_KEY=aqui_tu_clave
+
+IMPORTANTE: esa clave es como la contrasena de tu tarjeta. No la pegues nunca
+en un chat, ni en Claude, ni en ningun sitio. Solo va en ese archivo.
+
+
+COMPROBAR QUE TODO ESTA BIEN
+----------------------------
+Escribe:   comprueba que esta todo listo para replicar anuncios
+
+Tiene que contestar LISTO. Si falta algo, te dice exactamente que es.
+
+
+YA ESTA. COMO SE USA
+--------------------
+Escribe:   /replicar-anuncio-con-ia
+
+Y pega el enlace del anuncio (de TrendTrack o de la Biblioteca de anuncios de
+Meta) o la ruta de un archivo .mp4. A partir de ahi te va preguntando.
+
+Antes de gastar un solo centimo te ensena cuanto va a costar y espera a que
+digas que si.
+
+
+MAC Y WINDOWS
+-------------
+Funciona en los dos. Esta probado de principio a fin en Mac.
+En Windows hay dos cosas que cambian:
+  - La primera vez, la pestana Code te puede pedir instalar Git. Le dices que si,
+    cierras Claude y lo vuelves a abrir.
+  - ffmpeg se instala con winget en vez de con brew. Lo hace el solo igual.
+Si algo no te funciona en Windows, pegale el error a Claude: te lo arregla el.
+
+
+LO QUE TIENES QUE SABER ANTES DE EMPEZAR
+----------------------------------------
+- La voz la genera la IA, pero copiando la del anuncio original: misma voz, mismas
+  palabras y los labios cuadran. No hace falta ElevenLabs para nada.
+- Los subtitulos te los pone al final si quieres, en el idioma que le digas. No hace
+  falta nada mas: usa la misma clave de APImart.
+- Primero te ensena el video y una comparativa con el original, lado a lado. Y a
+  partir de ahi te va preguntando de una en una: subtitulos, tus textos en pantalla,
+  los elementos que llevaba el original (capturas, emojis, videos insertados) y el
+  formato. A lo que no quieras, le dices que no y sigue.
+- Cada trozo tarda entre 6 y 18 minutos. Un anuncio largo puede llevar media hora.
+- No sale perfecto a la primera siempre. Lo normal es repetir uno o dos trozos.
+- Si un trozo lo bloquea el filtro de contenido, no te cobran nada.
+- Replicar un anuncio de la competencia con TU producto es normal en este negocio.
+  Replicarlo con el producto y la marca de otro, para venderlo tu, no lo es.
